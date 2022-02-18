@@ -1,0 +1,4 @@
+include ':Resourse'
+include ':Base'
+include ':app'
+rootProject.name = "AIWeather"
