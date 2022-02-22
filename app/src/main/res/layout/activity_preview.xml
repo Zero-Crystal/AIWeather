@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
-    tools:context=".ui.PreviewActivity">
+    android:background="@drawable/bg_rain"
+    tools:context=".ui.activity.PreviewActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -16,6 +16,6 @@
         android:gravity="center"
         android:textSize="25sp"
         android:textColor="@color/white"
-        android:text="预 览 页"/>
+        android:text="AIWeather"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

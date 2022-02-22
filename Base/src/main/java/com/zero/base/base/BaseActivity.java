@@ -1,15 +1,11 @@
-package com.zero.base.ui;
+package com.zero.base.base;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.zero.base.controller.ActivityController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
 

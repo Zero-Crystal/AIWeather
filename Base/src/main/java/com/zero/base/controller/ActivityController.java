@@ -21,8 +21,8 @@ public class ActivityController {
     }
 
     public static void finishAll() {
-        if (activityList.size() > 0) {
-            for (Activity activity : activityList) {
+        for (Activity activity : activityList) {
+            if (!activity.isFinishing()) {
                 activity.finish();
             }
         }

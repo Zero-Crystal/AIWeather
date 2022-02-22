@@ -1,4 +1,4 @@
-package com.zero.aiweather.ui;
+package com.zero.aiweather.ui.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,28 +6,31 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.zero.aiweather.R;
+import com.zero.base.base.BaseActivity;
+import com.zero.base.controller.ActivityController;
+import com.zero.base.util.Constant;
+import com.zero.base.util.LogUtils;
 import com.zero.base.util.ToastUtils;
 
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PreviewActivity extends AppCompatActivity {
+public class PreviewActivity extends BaseActivity {
     private List<String> permissionList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
-        chexkPermission();
+        checkPermission();
     }
 
-    private void chexkPermission() {
+    private void checkPermission() {
+        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission");
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add("android.permission.READ_EXTERNAL_STORAGE");
         }
@@ -41,35 +44,43 @@ public class PreviewActivity extends AppCompatActivity {
             permissionList.add("android.permission.ACCESS_FINE_LOCATION");
         }
         if (permissionList.size() > 0) {
+            LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission: permissionList size=" + permissionList.size());
             String[] permissions = permissionList.toArray(new String[permissionList.size()]);
-            for (String permission : permissions) {
-                ActivityCompat.requestPermissions(this, permissions, 1);
-            }
         } else {
-            startMainActivity();
+            LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission: start Main");
+            MainActivity.startMain(PreviewActivity.this);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onRequestPermissionsResult: request code=" + requestCode);
         switch (requestCode) {
             case 1:
                 for (int i : grantResults) {
                     if (i != PackageManager.PERMISSION_GRANTED) {
-                        ToastUtils.toastShort(PreviewActivity.this, "授权失败，无法使用此app");
-                        finish();
+                        ToastUtils.toastShort("授权失败，无法使用此app");
+                        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onRequestPermissionsResult: 授权失败");
                     }
                 }
-                startMainActivity();
+                MainActivity.startMain(PreviewActivity.this);
                 break;
             default:
                 break;
         }
     }
 
-    private void startMainActivity() {
-        Intent intent = new Intent(PreviewActivity.this, MainActivity.class);
-        startActivity(intent);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onPause");
+        ActivityController.finishAll();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onDestroy");
     }
 }
