@@ -27,9 +27,8 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
     }
 
     @Override
-    public void getWeatherNow() {
-        LogUtils.d(Constant.TAG, "WeatherPresenter: ----------------> getWeatherNow");
-        String url = NetApi.BaseUrl + NetApi.weatherNow + "?location=101010100&key=" + Constant.ApiKey;
+    public void getWeatherNow(String location) {
+        String url = NetApi.BaseUrl + NetApi.weatherNow + "?location=" + location + "&key=" + Constant.ApiKey;
         OkHttpUtils.getRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -39,7 +38,6 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                LogUtils.d(Constant.TAG, "WeatherPresenter: ----------------> getWeatherNow: onResponse");
                 NowResponse nowResponse = new Gson().fromJson(response.body().string(), NowResponse.class);
                 if (nowResponse != null && nowResponse.getCode().equals("200")) {
                     activity.runOnUiThread(new Runnable() {
@@ -54,9 +52,8 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
     }
 
     @Override
-    public void getWeather24Hour() {
-        LogUtils.d(Constant.TAG, "WeatherPresenter: ----------------> getWeather24Hour");
-        String url = NetApi.BaseUrl + NetApi.weather24Hour + "?location=101010100&key=" + Constant.ApiKey;
+    public void getWeather24Hour(String location) {
+        String url = NetApi.BaseUrl + NetApi.weather24Hour + "?location=" + location + "&key=" + Constant.ApiKey;
         OkHttpUtils.getRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -66,7 +63,6 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                LogUtils.d(Constant.TAG, "WeatherPresenter: ----------------> getWeather24Hour: onResponse");
                 Hour24Response hourResponse = new Gson().fromJson(response.body().string(), Hour24Response.class);
                 if (hourResponse != null && hourResponse.getCode().equals("200")) {
                     activity.runOnUiThread(new Runnable() {
@@ -81,9 +77,8 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
     }
 
     @Override
-    public void getWeather7Day() {
-        LogUtils.d(Constant.TAG, "WeatherPresenter: ----------------> getWeather7Day");
-        String url = NetApi.BaseUrl + NetApi.weather7Day + "?location=101010100&key=" + Constant.ApiKey;
+    public void getWeather7Day(String location) {
+        String url = NetApi.BaseUrl + NetApi.weather7Day + "?location=" + location + "&key=" + Constant.ApiKey;
         OkHttpUtils.getRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -93,7 +88,6 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                LogUtils.d(Constant.TAG, "WeatherPresenter: ----------------> getWeather7Day: onResponse");
                 Day7Response dayResponse = new Gson().fromJson(response.body().string(), Day7Response.class);
                 if (dayResponse != null && dayResponse.getCode().equals("200")) {
                     activity.runOnUiThread(new Runnable() {

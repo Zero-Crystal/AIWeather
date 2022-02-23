@@ -2,6 +2,8 @@ package com.zero.base.util;
 
 import com.zero.base.R;
 
+import java.text.DecimalFormat;
+
 public class WeatherUtils {
 
     public static int getWeatherIcon(String text) {

@@ -28,7 +28,17 @@
                     app:layout_constraintRight_toRightOf="parent"
                     android:textSize="23sp"
                     android:textColor="@color/white"
-                    android:text="昌平区"/>
+                    android:text="利通区"/>
+
+                <ImageView
+                    android:id="@+id/iv_locate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tv_weather_locate"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_weather_locate"
+                    app:layout_constraintLeft_toRightOf="@+id/tv_weather_locate"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/tv_weather_tem"

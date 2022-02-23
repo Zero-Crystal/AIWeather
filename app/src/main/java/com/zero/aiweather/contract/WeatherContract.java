@@ -6,9 +6,9 @@ import com.zero.aiweather.model.response.NowResponse;
 
 public class WeatherContract {
     public interface IPresenter {
-        void getWeatherNow();
-        void getWeather24Hour();
-        void getWeather7Day();
+        void getWeatherNow(String location);
+        void getWeather24Hour(String location);
+        void getWeather7Day(String location);
     }
 
     public interface IView {

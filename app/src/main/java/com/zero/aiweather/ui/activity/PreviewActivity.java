@@ -30,15 +30,11 @@ public class PreviewActivity extends BaseActivity {
     }
 
     private void checkPermission() {
-        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission");
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add("android.permission.READ_EXTERNAL_STORAGE");
         }
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add("android.permission.WRITE_EXTERNAL_STORAGE");
-        }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add("android.permission.ACCESS_COARSE_LOCATION");
         }
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add("android.permission.ACCESS_FINE_LOCATION");
@@ -46,9 +42,11 @@ public class PreviewActivity extends BaseActivity {
         if (permissionList.size() > 0) {
             LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission: permissionList size=" + permissionList.size());
             String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(this, permissions, 1);
         } else {
             LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission: start Main");
             MainActivity.startMain(PreviewActivity.this);
+            ActivityController.finishAll();
         }
     }
 
@@ -65,6 +63,7 @@ public class PreviewActivity extends BaseActivity {
                     }
                 }
                 MainActivity.startMain(PreviewActivity.this);
+                ActivityController.finishAll();
                 break;
             default:
                 break;
@@ -72,15 +71,7 @@ public class PreviewActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onPause");
-        ActivityController.finishAll();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onDestroy");
     }
 }
