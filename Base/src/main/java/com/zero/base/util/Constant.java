@@ -5,7 +5,11 @@ public class Constant {
 
     public static final String TAG = "test";
 
+    public static final String TAG_VIEW_MODEL = "viewModel";
+
     public static final String SP_LOCATION = "location";
 
     public static final String SP_LOCATION_DISTRICT = "district";
+
+    public static final String SP_START_MODEL = "startModel";
 }

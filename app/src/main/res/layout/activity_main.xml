@@ -11,14 +11,14 @@
         android:id="@+id/tb_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/function"
-        android:background="@color/blue_30"/>
+        app:navigationIcon="@drawable/icon_functions"
+        android:background="@color/blue_30"
+        app:titleTextColor="@color/white"/>
 
-    <fragment
-        android:id="@+id/fg_main"
+    <FrameLayout
+        android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tb_title"
-        android:layout_marginTop="@dimen/dp_10"
-        android:name="com.zero.aiweather.ui.fragment.WeatherFragment"/>
+        android:layout_marginTop="@dimen/dp_10"/>
 </RelativeLayout>

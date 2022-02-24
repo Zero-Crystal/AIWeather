@@ -31,4 +31,16 @@ public class SPUtils {
         String location = sp.getString(key, "北京");
         return location;
     }
+
+    public static void saveStartModel(String key, boolean isFragment) {
+        SharedPreferences.Editor editor = AIWeatherApplication.getContext().getSharedPreferences(LocationSP, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(key, isFragment);
+        editor.apply();
+    }
+
+    public static boolean getStartModel(String key) {
+        SharedPreferences sp = AIWeatherApplication.getContext().getSharedPreferences(LocationSP, Context.MODE_PRIVATE);
+        boolean isFragment = sp.getBoolean(key, false);
+        return isFragment;
+    }
 }

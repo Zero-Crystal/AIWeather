@@ -12,8 +12,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -22,7 +25,9 @@ import com.baidu.location.LocationClientOption;
 import com.zero.aiweather.R;
 import com.zero.aiweather.adapter.Day7Adapter;
 import com.zero.aiweather.adapter.Hour24Adapter;
+import com.zero.aiweather.contract.CityViewModel;
 import com.zero.aiweather.model.bean.DailyBean;
+import com.zero.aiweather.model.bean.SearchCityBean;
 import com.zero.aiweather.model.response.Day7Response;
 import com.zero.aiweather.model.response.Hour24Response;
 import com.zero.aiweather.model.bean.HourlyBean;
@@ -48,6 +53,8 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
     private List<DailyBean> dailyList = new ArrayList<>();
     private Day7Adapter day7Adapter;
     private LocationClient locationClient;
+    private CityViewModel viewModel;
+    private boolean isFragment = false;
 
     @Nullable
     @Override
@@ -61,7 +68,20 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+        initViewModel();
         initLocation();
+        isFragment = SPUtils.getStartModel(Constant.SP_START_MODEL);
+        if (!isFragment) {
+            LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> onActivityCreated: isFragment=" + isFragment);
+            startLocate();
+        }
+        binding.srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> 下拉刷新，重新定位");
+                startLocate();
+            }
+        });
     }
 
     private void initView() {
@@ -88,33 +108,31 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
         option.setNeedNewVersionRgc(true);
         locationClient.setLocOption(option);
         locationClient.registerLocationListener(new MyLocationListener());
+    }
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(getActivity(), new ViewModelProvider.NewInstanceFactory()).get(CityViewModel.class);
+        viewModel.getCityBean().observe(this, new Observer<SearchCityBean>() {
+            @Override
+            public void onChanged(SearchCityBean searchCityBean) {
+                LogUtils.d(Constant.TAG, "WeatherFragment: ------------------> initViewModel: 输入内容已更新，id=" + searchCityBean.getCityId()
+                        + "，name=" + searchCityBean.getCityName());
+                binding.tvWeatherLocate.setText(searchCityBean.getCityName());
+                binding.ivLocate.setVisibility(View.INVISIBLE);
+                presenter.getWeatherNow(searchCityBean.getCityId());
+                presenter.getWeather24Hour(searchCityBean.getCityId());
+                presenter.getWeather7Day(searchCityBean.getCityId());
+                isFragment = false;
+            }
+        });
+    }
+
+    private void startLocate() {
         if (GPSUtils.isOPen(getContext())) {
             startProgress(getContext());
             locationClient.start();
         } else {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("当前定位未打开，是否需要开启定位？")
-                    .setCancelable(false)
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            startActivityForResult(intent, 887);
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            startProgress(getContext());
-                            String location = SPUtils.getLaLongLocation(Constant.SP_LOCATION);
-                            presenter.getWeatherNow(location);
-                            presenter.getWeather24Hour(location);
-                            presenter.getWeather7Day(location);
-                            binding.tvWeatherLocate.setText(SPUtils.getLocation(Constant.SP_LOCATION_DISTRICT));
-                            dialogInterface.dismiss();
-                        }
-                    }).show();
+            showDialog();
         }
     }
 
@@ -127,7 +145,6 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
 
     @Override
     public void showWeather24Hour(Hour24Response hourResponse) {
-        LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> showWeather24Hour");
         dismissProgress();
         hourlyList.clear();
         hourlyList.addAll(hourResponse.getHourly());
@@ -136,7 +153,6 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
 
     @Override
     public void showWeather7Day(Day7Response dayResponse) {
-        LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> showWeather7Day");
         dismissProgress();
         binding.tvWeatherTemMaxMin.setText(dayResponse.getDaily().get(0).getTempMin() + "℃~" + dayResponse.getDaily().get(0).getTempMax() + "℃");
         binding.tvWeatherText.setText("天气" + dayResponse.getDaily().get(0).getTextDay());
@@ -145,9 +161,36 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
         day7Adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 887) {
+            startProgress(getContext());
+            locationClient.start();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SPUtils.saveStartModel(Constant.SP_START_MODEL, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (locationClient.isStarted()) {
+            locationClient.stop();
+        }
+    }
+
     private class MyLocationListener extends BDAbstractLocationListener {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
+            locationClient.stop();
+            if (binding.srlRefresh.isRefreshing()) {
+                binding.srlRefresh.setRefreshing(false);
+            }
             String location = GPSUtils.doubleToString(bdLocation.getLongitude()) + "," + GPSUtils.doubleToString(bdLocation.getLatitude());
             SPUtils.saveLaLongLocation(Constant.SP_LOCATION, location);
             String district = bdLocation.getDistrict();    //获取区县
@@ -163,18 +206,32 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 887) {
-            startProgress(getContext());
-            locationClient.start();
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        locationClient.stop();
+    private AlertDialog showDialog() {
+        return new AlertDialog.Builder(getContext())
+                .setTitle("当前定位未打开，是否需要开启定位？")
+                .setCancelable(false)
+                .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 887);
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startProgress(getContext());
+                        String location = SPUtils.getLaLongLocation(Constant.SP_LOCATION);
+                        presenter.getWeatherNow(location);
+                        presenter.getWeather24Hour(location);
+                        presenter.getWeather7Day(location);
+                        binding.tvWeatherLocate.setText(SPUtils.getLocation(Constant.SP_LOCATION_DISTRICT));
+                        dialogInterface.dismiss();
+                        if (binding.srlRefresh.isRefreshing()) {
+                            binding.srlRefresh.setRefreshing(false);
+                        }
+                    }
+                }).show();
     }
 }

@@ -7,7 +7,7 @@ public class NetApi {
     /**
      * 查询城市
      * */
-    public static final String chinaCities = "https://geoapi.qweather.com/v2/city/lookup?";
+    public static final String chinaCities = "https://geoapi.qweather.com/v2/city/lookup";
 
     public static final String BaseUrl = "https://devapi.qweather.com/v7/weather";
 
