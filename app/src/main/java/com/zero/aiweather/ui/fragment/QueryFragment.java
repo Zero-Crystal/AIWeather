@@ -15,7 +15,7 @@ import com.zero.aiweather.adapter.LocationAdapter;
 import com.zero.aiweather.contract.CityViewModel;
 import com.zero.aiweather.contract.LocationContract;
 import com.zero.aiweather.contract.LocationPresenter;
-import com.zero.aiweather.databinding.FragmentLocationSearchBinding;
+import com.zero.aiweather.databinding.FragmentCityQueryBinding;
 import com.zero.aiweather.model.bean.LocationBean;
 import com.zero.aiweather.model.bean.SearchCityBean;
 import com.zero.aiweather.model.response.CityResponse;
@@ -28,8 +28,10 @@ import com.zero.base.util.SPUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends BaseFragment implements LocationContract.IView {
-    private FragmentLocationSearchBinding binding;
+public class QueryFragment extends BaseFragment implements LocationContract.IView {
+    public static final String TAG = "QueryFragment";
+
+    private FragmentCityQueryBinding binding;
     private List<LocationBean> locationList = new ArrayList<>();
     private LocationAdapter adapter;
     private LocationPresenter presenter;
@@ -38,7 +40,7 @@ public class SearchFragment extends BaseFragment implements LocationContract.IVi
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentLocationSearchBinding.inflate(inflater, container,false);
+        binding = FragmentCityQueryBinding.inflate(inflater, container,false);
         presenter = new LocationPresenter(this, getActivity());
         return binding.getRoot();
     }
@@ -56,7 +58,7 @@ public class SearchFragment extends BaseFragment implements LocationContract.IVi
         binding.lvSearchResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                LogUtils.d(Constant.TAG_VIEW_MODEL, "SearchFragment: ------------------> initListView: 更新搜索结果，id=" + locationList.get(position).getId()
+                LogUtils.d(TAG, "SearchFragment: ------------------> initListView: 更新搜索结果，id=" + locationList.get(position).getId()
                         + "，name=" + locationList.get(position).getName());
                 //折叠输入框
                 MainActivity activity = (MainActivity) getActivity();
@@ -77,14 +79,14 @@ public class SearchFragment extends BaseFragment implements LocationContract.IVi
             public void onChanged(String input) {
                 presenter.getLocationId(input);
                 adapter.setInputText(input);
-                LogUtils.d(Constant.TAG_VIEW_MODEL, "SearchFragment: ------------------> initViewModel: 更新输入内容=" + input);
+                LogUtils.d(TAG, "SearchFragment: ------------------> initViewModel: 更新输入内容=" + input);
             }
         });
     }
 
     @Override
     public void getCityNameList(CityResponse response) {
-        LogUtils.d(Constant.TAG_VIEW_MODEL, "SearchFragment: ------------------> getCityNameList: 搜索结果, city size=" + response.getLocation().size());
+        LogUtils.d(TAG, "SearchFragment: ------------------> getCityNameList: 搜索结果, city size=" + response.getLocation().size());
         locationList.clear();
         locationList.addAll(response.getLocation());
         adapter.notifyDataSetChanged();

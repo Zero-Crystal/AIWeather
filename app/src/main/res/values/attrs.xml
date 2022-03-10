@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleProgressView">
+        <attr name="progressColor" format="color"/>
+        <attr name="progressWidth" format="dimension"/>
+        <attr name="aqiText" format="string"/>
+        <attr name="levelText" format="string"/>
+        <attr name="aqiTextColor" format="color"/>
+        <attr name="textVerticalInterval" format="dimension"/>
+    </declare-styleable>
+</resources>

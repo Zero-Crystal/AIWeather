@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PreviewActivity extends BaseActivity {
+    public static final String TAG = "PreviewActivity";
+
     private List<String> permissionList = new ArrayList<>();
 
     @Override
@@ -40,11 +42,11 @@ public class PreviewActivity extends BaseActivity {
             permissionList.add("android.permission.ACCESS_FINE_LOCATION");
         }
         if (permissionList.size() > 0) {
-            LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission: permissionList size=" + permissionList.size());
+            LogUtils.d(TAG, "PreviewActivity: ----------------> checkPermission: permissionList size=" + permissionList.size());
             String[] permissions = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(this, permissions, 1);
         } else {
-            LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> checkPermission: start Main");
+            LogUtils.d(TAG, "PreviewActivity: ----------------> checkPermission: start Main");
             MainActivity.startMain(PreviewActivity.this);
             ActivityController.finishAll();
         }
@@ -53,13 +55,13 @@ public class PreviewActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onRequestPermissionsResult: request code=" + requestCode);
+        LogUtils.d(TAG, "PreviewActivity: ----------------> onRequestPermissionsResult: request code=" + requestCode);
         switch (requestCode) {
             case 1:
                 for (int i : grantResults) {
                     if (i != PackageManager.PERMISSION_GRANTED) {
                         ToastUtils.toastShort("授权失败，无法使用此app");
-                        LogUtils.d(Constant.TAG, "PreviewActivity: ----------------> onRequestPermissionsResult: 授权失败");
+                        LogUtils.d(TAG, "PreviewActivity: ----------------> onRequestPermissionsResult: 授权失败");
                     }
                 }
                 MainActivity.startMain(PreviewActivity.this);

@@ -20,6 +20,7 @@ import java.util.List;
 
 public class Day7Adapter extends RecyclerView.Adapter<Day7Adapter.Day7Holder> {
     private List<DailyBean> dailyList = new ArrayList<>();
+    private IDay7OnClickListener clickListener;
 
     public Day7Adapter(List<DailyBean> dailyList) {
         this.dailyList = dailyList;
@@ -38,11 +39,21 @@ public class Day7Adapter extends RecyclerView.Adapter<Day7Adapter.Day7Holder> {
         holder.binding.tvWeatherDate.setText(dailyList.get(position).getFxDate());
         holder.binding.tvWeatherTem.setText(dailyList.get(position).getTempMax() + "℃~" + dailyList.get(position).getTempMin() + "℃");
         holder.binding.ivWeather.setImageResource(WeatherUtils.getWeatherIcon(dailyList.get(position).getTextDay()));
+        holder.binding.itemLlLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickListener.onItemClick(dailyList.get(position));
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return dailyList.size();
+    }
+
+    public void setClickListener(IDay7OnClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     public class Day7Holder extends RecyclerView.ViewHolder {
@@ -51,5 +62,9 @@ public class Day7Adapter extends RecyclerView.Adapter<Day7Adapter.Day7Holder> {
             super(itemView.getRoot());
             binding = itemView;
         }
+    }
+
+    public interface IDay7OnClickListener {
+        void onItemClick(DailyBean daily);
     }
 }

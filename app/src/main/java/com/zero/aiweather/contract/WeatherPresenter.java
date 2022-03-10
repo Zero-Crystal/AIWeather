@@ -3,9 +3,11 @@ package com.zero.aiweather.contract;
 import android.app.Activity;
 
 import com.google.gson.Gson;
+import com.zero.aiweather.model.response.AirNowResponse;
 import com.zero.aiweather.model.response.Day7Response;
 import com.zero.aiweather.model.response.Hour24Response;
 import com.zero.aiweather.model.response.NowResponse;
+import com.zero.aiweather.ui.fragment.WeatherFragment;
 import com.zero.base.net.NetApi;
 import com.zero.base.util.Constant;
 import com.zero.base.util.LogUtils;
@@ -33,13 +35,13 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                LogUtils.e(Constant.TAG, "数据请求失败！" + e.getMessage());
+                LogUtils.e(WeatherFragment.TAG, "数据请求失败！" + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 NowResponse nowResponse = new Gson().fromJson(response.body().string(), NowResponse.class);
-                if (nowResponse != null && nowResponse.getCode().equals("200")) {
+                if (nowResponse != null && nowResponse.getCode().equals(Constant.REQUEST_SUCCESS)) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -58,13 +60,13 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                LogUtils.e(Constant.TAG, "数据请求失败！" + e.getMessage());
+                LogUtils.e(WeatherFragment.TAG, "数据请求失败！" + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Hour24Response hourResponse = new Gson().fromJson(response.body().string(), Hour24Response.class);
-                if (hourResponse != null && hourResponse.getCode().equals("200")) {
+                if (hourResponse != null && hourResponse.getCode().equals(Constant.REQUEST_SUCCESS)) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -83,17 +85,41 @@ public class WeatherPresenter implements WeatherContract.IPresenter {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                LogUtils.e(Constant.TAG, "数据请求失败！" + e.getMessage());
+                LogUtils.e(WeatherFragment.TAG, "数据请求失败！" + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Day7Response dayResponse = new Gson().fromJson(response.body().string(), Day7Response.class);
-                if (dayResponse != null && dayResponse.getCode().equals("200")) {
+                if (dayResponse != null && dayResponse.getCode().equals(Constant.REQUEST_SUCCESS)) {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             view.showWeather7Day(dayResponse);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getAirNow(String location) {
+        String url = NetApi.BaseUrl + NetApi.airNow + "?location=" + location + "&key=" + Constant.ApiKey;
+        OkHttpUtils.getRequest(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                AirNowResponse airNowResponse = new Gson().fromJson(response.body().string(), AirNowResponse.class);
+                if (airNowResponse != null && airNowResponse.getCode().equals(Constant.REQUEST_SUCCESS)) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.showAirNow(airNowResponse);
                         }
                     });
                 }

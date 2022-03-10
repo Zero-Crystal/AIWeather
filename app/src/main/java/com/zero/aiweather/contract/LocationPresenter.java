@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.google.gson.Gson;
 import com.zero.aiweather.model.response.CityResponse;
+import com.zero.aiweather.ui.fragment.QueryFragment;
 import com.zero.base.net.NetApi;
 import com.zero.base.util.Constant;
 import com.zero.base.util.LogUtils;
@@ -31,7 +32,7 @@ public class LocationPresenter implements LocationContract.IPresenter {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                LogUtils.e(Constant.TAG, "数据获取失败！" + e.getMessage());
+                LogUtils.e(QueryFragment.TAG, "数据获取失败！" + e.getMessage());
             }
 
             @Override

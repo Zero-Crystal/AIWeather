@@ -5,13 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,27 +26,34 @@ import com.zero.aiweather.R;
 import com.zero.aiweather.adapter.Day7Adapter;
 import com.zero.aiweather.adapter.Hour24Adapter;
 import com.zero.aiweather.contract.CityViewModel;
+import com.zero.aiweather.databinding.FragmentWeatherBinding;
 import com.zero.aiweather.model.bean.DailyBean;
 import com.zero.aiweather.model.bean.SearchCityBean;
+import com.zero.aiweather.model.response.AirNowResponse;
 import com.zero.aiweather.model.response.Day7Response;
 import com.zero.aiweather.model.response.Hour24Response;
 import com.zero.aiweather.model.bean.HourlyBean;
 import com.zero.aiweather.contract.WeatherContract;
 import com.zero.aiweather.contract.WeatherPresenter;
-import com.zero.aiweather.databinding.FragmentWeatherForcastBinding;
 import com.zero.aiweather.model.response.NowResponse;
+import com.zero.aiweather.voice.config.VoiceConfig;
 import com.zero.base.AIWeatherApplication;
 import com.zero.base.base.BaseFragment;
 import com.zero.base.util.Constant;
+import com.zero.base.util.DensityUtil;
 import com.zero.base.util.GPSUtils;
 import com.zero.base.util.LogUtils;
 import com.zero.base.util.SPUtils;
+import com.zero.base.util.ToastUtils;
+import com.zero.base.util.WeatherUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherFragment extends BaseFragment implements WeatherContract.IView {
-    private FragmentWeatherForcastBinding binding;
+    public static final String TAG = "WeatherFragment";
+
+    private FragmentWeatherBinding binding;
     private WeatherPresenter presenter;
     private List<HourlyBean> hourlyList = new ArrayList<>();
     private Hour24Adapter hour24Adapter;
@@ -55,12 +62,19 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
     private LocationClient locationClient;
     private CityViewModel viewModel;
     private boolean isFragment = false;
+    private VoiceConfig voiceConfig;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentWeatherForcastBinding.inflate(inflater, container, false);
+        binding = FragmentWeatherBinding.inflate(inflater, container, false);
         presenter = new WeatherPresenter(this, getActivity());
+        voiceConfig = VoiceConfig.getInstance();
+        voiceConfig.initAuth();
+        boolean success = voiceConfig.initBdVoice();
+        if (!success) {
+            ToastUtils.toastShort("语音合成模块初始化失败！");
+        }
         return binding.getRoot();
     }
 
@@ -72,13 +86,16 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
         initLocation();
         isFragment = SPUtils.getStartModel(Constant.SP_START_MODEL);
         if (!isFragment) {
-            LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> onActivityCreated: isFragment=" + isFragment);
+            LogUtils.d(TAG, "WeatherFragment: ----------------> onActivityCreated: isFragment=" + isFragment);
             startLocate();
         }
+        binding.srlRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.blue));
+        binding.srlRefresh.setDistanceToTriggerSync(300);
+        binding.srlRefresh.setProgressViewOffset(true, 0, 100);
         binding.srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> 下拉刷新，重新定位");
+                LogUtils.d(TAG, "WeatherFragment: ----------------> 下拉刷新，重新定位");
                 startLocate();
             }
         });
@@ -90,13 +107,41 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
         hourManager.setOrientation(RecyclerView.HORIZONTAL);
         binding.rvWeatherHour.setLayoutManager(hourManager);
         hour24Adapter = new Hour24Adapter(hourlyList);
+        hour24Adapter.setClickListener(new Hour24Adapter.IHour24OnClickListener() {
+            @Override
+            public void onItemClick(HourlyBean hourly) {
+                if (voiceConfig.isSpeaking()) {
+                    voiceConfig.stop();
+                } else {
+                    voiceConfig.speak(binding.tvWeatherLocate.getText().toString() + "今日" + hourly.getFxTime().substring(11, 13) + "点，天气"
+                            + hourly.getText() + "，温度" + hourly.getTemp() + "摄氏度，有"
+                            + hourly.getWindDir() + "，风力" + hourly.getWindScale() + "级");
+                    LogUtils.d(TAG, "WeatherFragment: ----------------> onItemClick: 逐小时天气播报成功！");
+
+                }
+            }
+        });
         binding.rvWeatherHour.setAdapter(hour24Adapter);
         //逐天预报
         LinearLayoutManager dailyManager = new LinearLayoutManager(getContext());
         dailyManager.setOrientation(RecyclerView.VERTICAL);
         binding.rvWeatherDay.setLayoutManager(dailyManager);
         day7Adapter = new Day7Adapter(dailyList);
+        day7Adapter.setClickListener(new Day7Adapter.IDay7OnClickListener() {
+            @Override
+            public void onItemClick(DailyBean daily) {
+                if (voiceConfig.isSpeaking()) {
+                    voiceConfig.stop();
+                } else {
+                    voiceConfig.speak(binding.tvWeatherLocate.getText().toString() + daily.getFxDate().substring(5, 7) + "月" + daily.getFxDate().substring(8, 10) + "日天气"
+                            + daily.getTextDay() + "，最高温度" + daily.getTempMax() + "摄氏度，最低温度" + daily.getTempMin() + "摄氏度"
+                            + "，有" + daily.getWindDirDay() + "，风力" + daily.getWindScaleDay() + "级");
+                    LogUtils.d(TAG, "WeatherFragment: ----------------> onItemClick: 逐天天气播报成功！");
+                }
+            }
+        });
         binding.rvWeatherDay.setAdapter(day7Adapter);
+        binding.cpvProgress.setMaxNum(300);
     }
 
     private void initLocation() {
@@ -115,13 +160,14 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
         viewModel.getCityBean().observe(this, new Observer<SearchCityBean>() {
             @Override
             public void onChanged(SearchCityBean searchCityBean) {
-                LogUtils.d(Constant.TAG, "WeatherFragment: ------------------> initViewModel: 输入内容已更新，id=" + searchCityBean.getCityId()
+                LogUtils.d(TAG, "WeatherFragment: ------------------> initViewModel: 输入内容已更新，id=" + searchCityBean.getCityId()
                         + "，name=" + searchCityBean.getCityName());
                 binding.tvWeatherLocate.setText(searchCityBean.getCityName());
                 binding.ivLocate.setVisibility(View.INVISIBLE);
                 presenter.getWeatherNow(searchCityBean.getCityId());
                 presenter.getWeather24Hour(searchCityBean.getCityId());
                 presenter.getWeather7Day(searchCityBean.getCityId());
+                presenter.getAirNow(searchCityBean.getCityId());
                 isFragment = false;
             }
         });
@@ -138,7 +184,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
 
     @Override
     public void showWeatherNow(NowResponse nowResponse) {
-        LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> showWeatherNow");
+        LogUtils.d(TAG, "WeatherFragment: ----------------> showWeatherNow");
         dismissProgress();
         binding.tvWeatherTem.setText(nowResponse.getNow().getTemp() + "℃");
     }
@@ -162,6 +208,21 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
     }
 
     @Override
+    public void showAirNow(AirNowResponse airNowResponse) {
+        LogUtils.d(TAG, TAG + ": -----------> Aqi=" + airNowResponse.getNow().getAqi());
+        binding.cpvProgress.setProgressColor(WeatherUtils.getAirAqiColor(Integer.valueOf(airNowResponse.getNow().getLevel())));
+        binding.cpvProgress.setSweepAngle(Float.valueOf(airNowResponse.getNow().getAqi()));
+        binding.cpvProgress.setAqi(airNowResponse.getNow().getAqi());
+        binding.cpvProgress.setLevel(airNowResponse.getNow().getCategory());
+
+        binding.tvPm10.setText("PM10：" + airNowResponse.getNow().getPm10());
+        binding.tvPm25.setText("PM2.5：" + airNowResponse.getNow().getPm2p5());
+        binding.tvNo2.setText("No2：" + airNowResponse.getNow().getNo2());
+        binding.tvSo2.setText("So2：" + airNowResponse.getNow().getSo2());
+        binding.tvCo.setText("CO：" + airNowResponse.getNow().getCo());
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 887) {
@@ -182,6 +243,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
         if (locationClient.isStarted()) {
             locationClient.stop();
         }
+        voiceConfig.release();
     }
 
     private class MyLocationListener extends BDAbstractLocationListener {
@@ -198,11 +260,12 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
             presenter.getWeatherNow(location);
             presenter.getWeather24Hour(location);
             presenter.getWeather7Day(location);
+            presenter.getAirNow(location);
             binding.tvWeatherLocate.setText(district);
-            binding.ivLocate.setImageResource(R.drawable.locate);
+            binding.ivLocate.setImageResource(R.drawable.icon_locate);
             binding.ivLocate.setVisibility(View.VISIBLE);
-            LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> MyLocationListener: 定位方式：" + bdLocation.getLocTypeDescription());
-            LogUtils.d(Constant.TAG, "WeatherFragment: ----------------> MyLocationListener: location=" + location + ", " + district);
+            LogUtils.d(TAG, "WeatherFragment: ----------------> MyLocationListener: 定位方式：" + bdLocation.getLocTypeDescription());
+            LogUtils.d(TAG, "WeatherFragment: ----------------> MyLocationListener: location=" + location + ", " + district);
         }
     }
 
@@ -226,6 +289,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.IVi
                         presenter.getWeatherNow(location);
                         presenter.getWeather24Hour(location);
                         presenter.getWeather7Day(location);
+                        presenter.getAirNow(location);
                         binding.tvWeatherLocate.setText(SPUtils.getLocation(Constant.SP_LOCATION_DISTRICT));
                         dialogInterface.dismiss();
                         if (binding.srlRefresh.isRefreshing()) {

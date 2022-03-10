@@ -1,6 +1,9 @@
 package com.zero.aiweather.ui.activity;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -10,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,11 +20,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.zero.aiweather.R;
 import com.zero.aiweather.contract.CityViewModel;
 import com.zero.aiweather.databinding.ActivityMainBinding;
-import com.zero.aiweather.ui.fragment.SearchFragment;
+import com.zero.aiweather.ui.fragment.QueryFragment;
 import com.zero.aiweather.ui.fragment.WeatherFragment;
+import com.zero.aiweather.voice.ui.activity.VoiceDemoActivity;
 import com.zero.base.base.BaseActivity;
 import com.zero.base.controller.ActivityController;
 import com.zero.base.util.Constant;
@@ -32,12 +36,15 @@ import com.zero.base.util.ToastUtils;
 import java.lang.reflect.Method;
 
 public class MainActivity extends BaseActivity {
+    public static final String TAG = "MainActivity";
+
     private ActivityMainBinding binding;
     private SearchView.SearchAutoComplete searchComplete;
     private SearchView mSearchView;
     //viewModel
     private CityViewModel viewModel;
     private long exitTime = 0;
+    private boolean isFirstFragment = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +53,7 @@ public class MainActivity extends BaseActivity {
         setContentView(binding.getRoot());
         initToolbar();
         viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CityViewModel.class);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fl_content, new WeatherFragment());
-        transaction.commit();
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(binding.tbTitle);
-        //这句代码使启用Activity回退功能，并显示Toolbar上的左侧回退图标
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //点击叉折叠搜索框
-        binding.tbTitle.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (searchComplete.isShown()) {
-                    clickBack();
-                }
-            }
-        });
+        replaceFragment(new WeatherFragment());
     }
 
     @Override
@@ -74,11 +64,59 @@ public class MainActivity extends BaseActivity {
         mSearchView = (SearchView) MenuItemCompat.getActionView(item);
         //设置Toolbar折叠图标
         ImageView queryBtn = mSearchView.findViewById(R.id.search_button);
-        queryBtn.setImageResource(R.drawable.search);
+        queryBtn.setImageResource(R.drawable.icon_query);
         //通过id得到输入框控件
         searchComplete = (SearchView.SearchAutoComplete) mSearchView.findViewById(R.id.search_src_text);
         searchViewListener();
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            LogUtils.d(TAG, "MainActivity: ---------> toolbar home键点击事件!");
+            if (searchComplete.isShown()) {
+                //点击叉折叠搜索框
+                clickBack();
+            } else {
+                binding.dlActivityMain.openDrawer(GravityCompat.START);
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && searchComplete.isShown()) {
+            clickBack();
+        } else {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(binding.tbTitle);
+        //这句代码使启用Activity回退功能，并显示Toolbar上的左侧回退图标
+        ActionBar actionBar =  getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.icon_functions);
+        }
+        binding.nvHome.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_voice_demo:
+                        Intent intent = new Intent(MainActivity.this, VoiceDemoActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private void searchViewListener() {
@@ -94,7 +132,7 @@ public class MainActivity extends BaseActivity {
             public boolean onQueryTextChange(String newText) {
                 //通知SearchFragment更新搜索结果
                 viewModel.setInputName(newText);
-                LogUtils.d(Constant.TAG_VIEW_MODEL, "MainActivity: -------------------> onQueryTextChange: " + newText);
+                LogUtils.d(QueryFragment.TAG, "MainActivity: -------------------> onQueryTextChange: " + newText);
                 return false;
             }
         });
@@ -103,21 +141,10 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onFocusChange(View view, boolean isFocus) {
                 if (isFocus) {
-                    replaceFragment(new SearchFragment());
+                    replaceFragment(new QueryFragment());
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && searchComplete.isShown()) {
-            clickBack();
-        } else {
-            exit();
-            return false;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void exit() {
@@ -148,7 +175,11 @@ public class MainActivity extends BaseActivity {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fl_content, fragment);
-        transaction.addToBackStack(null);
+        if (!isFirstFragment) {
+            transaction.addToBackStack(null);
+        } else {
+            isFirstFragment = false;
+        }
         transaction.commit();
     }
 

@@ -24,9 +24,9 @@ public class AIWeatherApplication extends Application {
         super.onCreate();
         context = getApplicationContext();
         //初始化日志输出等级
-        LogUtils.LEVEL = 0;
+        LogUtils.LEVEL = LogUtils.DEBUG;
         //初始化OkGo
-        initOkGo();
+//        initOkGo();
     }
 
     private void initOkGo() {

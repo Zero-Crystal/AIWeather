@@ -3,8 +3,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dp_10"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:id="@+id/item_ll_layout">
 
     <TextView
         android:id="@+id/tv_weather_date"
@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:gravity="left"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:text="2022-2-21"/>
 
     <ImageView
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:src="@drawable/qingzhuanduoyun"/>
+        android:src="@drawable/weather_qingzhuanduoyun"/>
 
     <TextView
         android:id="@+id/tv_weather_tem"
@@ -30,7 +30,7 @@
         android:layout_weight="1"
         android:gravity="right"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white_20"
         android:text="-5℃ - 6℃" />
 
 </LinearLayout>

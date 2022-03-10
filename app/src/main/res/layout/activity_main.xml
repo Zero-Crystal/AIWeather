@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/bg_sun"
     tools:context=".ui.activity.MainActivity">
 
@@ -11,14 +12,28 @@
         android:id="@+id/tb_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/icon_functions"
-        android:background="@color/blue_30"
-        app:titleTextColor="@color/white"/>
+        android:background="@color/blue_70"
+        android:theme="@style/Theme.Design.NoActionBar"
+        app:popupTheme="@style/Theme.Design.Light.NoActionBar"/>
 
-    <FrameLayout
-        android:id="@+id/fl_content"
+    <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tb_title"
-        android:layout_marginTop="@dimen/dp_10"/>
-</RelativeLayout>
+        android:id="@+id/dl_activity_main">
+        <!-- 首页主要显示内容-->
+        <FrameLayout
+            android:id="@+id/fl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nv_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/home_menu"
+            android:background="@color/blue_20"
+            app:itemTextColor="@color/white"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>
