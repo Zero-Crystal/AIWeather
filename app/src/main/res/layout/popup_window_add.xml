@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_20"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingBottom="@dimen/dp_20"
+    android:paddingTop="@dimen/dp_20">
+
+    <TextView
+        android:id="@+id/tv_change_city"
+        android:gravity="center"
+        android:layout_width="@dimen/dp_140"
+        android:layout_height="@dimen/dp_48"
+        android:text="切换城市"
+        android:foreground="@drawable/bg_white"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_16"/>
+
+    <TextView
+        android:id="@+id/tv_change_bg"
+        android:gravity="center"
+        android:layout_width="@dimen/dp_140"
+        android:layout_height="@dimen/dp_48"
+        android:text="切换背景"
+        android:foreground="@drawable/bg_white"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_16"/>
+
+</LinearLayout>

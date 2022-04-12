@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/dp_15"
+    android:gravity="center"
+    android:id="@+id/item_ll_layout">
+
+    <TextView
+        android:id="@+id/tv_item_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_13"
+        android:textColor="@color/white"
+        android:text="上午17:00"/>
+
+    <ImageView
+        android:id="@+id/iv_item_icon"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_10"
+        android:src="@drawable/weather_qingzhuanduoyun" />
+
+    <TextView
+        android:id="@+id/tv_item_tem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textSize="@dimen/sp_20"
+        android:textColor="@color/white"
+        android:text="5℃"/>
+
+</LinearLayout>

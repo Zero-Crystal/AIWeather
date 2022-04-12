@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
+    <color name="black_90">#1A000000</color>
+    <!--透明-->
+    <color name="transparent">#00000000</color>
     <!-- 白色-->
-    <color name="white">#FFFFFFF0</color>
-    <color name="white_0">#00FFFFFF</color>
+    <color name="white_100">#00FFFFFF</color>
     <color name="white_90">#1AFFFFFF</color>
     <color name="white_70">#4DFFFFFF</color>
+    <color name="white_50">#22FFFFFF</color>
     <color name="white_20">#CCFFFFFF</color>
+    <color name="white">#FFFFFFF0</color>
     <!-- 灰色-->
     <color name="gray_90">#1A999999</color>
     <color name="gray_70">#4D999999</color>
     <color name="gray_50">#80999999</color>
     <!-- 蓝色-->
-    <color name="blue">#3399ff</color>
     <color name="blue_90">#1A3399ff</color>
     <color name="blue_70">#4D3399ff</color>
     <color name="blue_50">#803399ff</color>
     <color name="blue_20">#CC3399ff</color>
+    <color name="blue">#3399ff</color>
     <!-- 天气示警颜色-->
     <color name="green">#33cc99</color>
     <color name="yellow">#ffff33</color>

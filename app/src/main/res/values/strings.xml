@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">AIWeather</string>
-    <string name="tem_10">10℃</string>
-    <string name="ten_10_0">10℃~0℃</string>
-    <string name="tem_disc_sun">晴</string>
+    <string name="temperature_high_low">%1$s / %2$s ℃</string>
+    <string name="tv_advice">生活建议：</string>
+    <string name="tv_item_advice">%1$s：%2$s</string>
+    <string name="tv_wind_level">风力 %1$s级</string>
+    <string name="tv_wind_direction">风向 %1$s</string>
+    <string name="tv_pm10">PM10：%1$s</string>
+    <string name="tv_pm25">PM25：%1$s </string>
+    <string name="tv_no2">NO2：%1$s </string>
+    <string name="tv_so2">SO2：%1$s </string>
+    <string name="tv_co">CO：%1$s </string>
+    <string name="tv_o3">O3：%1$s </string>
+    <string name="tv_last_update_time">上次更新时间：%1$s</string>
 </resources>

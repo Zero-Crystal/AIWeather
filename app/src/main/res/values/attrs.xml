@@ -8,4 +8,9 @@
         <attr name="aqiTextColor" format="color"/>
         <attr name="textVerticalInterval" format="dimension"/>
     </declare-styleable>
+
+    <!--白色风车-->
+    <declare-styleable name="WhiteWindmills">
+        <attr name="windColor" format="reference|color" />
+    </declare-styleable>
 </resources>

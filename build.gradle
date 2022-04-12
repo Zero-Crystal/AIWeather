@@ -3,6 +3,7 @@ buildscript {
     repositories {
         maven { url 'http://repos.taikangcloud.com:80/artifactory/gradle-aliyun-google/' }
         maven { url 'http://repos.taikangcloud.com:80/artifactory/gradle-aliyun-jcenter/' }
+        maven { url "http://repos.taikangcloud.com:80/artifactory/gradle-jitpack/" }
         google()
         jcenter()
     }
@@ -18,6 +19,7 @@ allprojects {
     repositories {
         maven { url 'http://repos.taikangcloud.com:80/artifactory/gradle-aliyun-google/' }
         maven { url 'http://repos.taikangcloud.com:80/artifactory/gradle-aliyun-jcenter/' }
+        maven { url "http://repos.taikangcloud.com:80/artifactory/gradle-jitpack/" }
         google()
         jcenter()
     }

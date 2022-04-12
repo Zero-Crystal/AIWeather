@@ -2,16 +2,56 @@
     <!-- Base application theme. -->
     <style name="Theme.AIWeather" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue_70</item>
-        <item name="colorPrimaryDark">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/blue_50</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color.
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-         Status bar color.
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-         Customize your theme here. -->
+        <item name="colorPrimaryDark">@color/blue_70</item>
+        <item name="colorPrimary">@color/blue_20</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorAccent">@color/purple_200</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
+
+    <!--右侧弹出-->
+    <style name="AnimationRightFade">
+        <!--进场动画-->
+        <item name="android:windowEnterAnimation">@anim/in_right_to_left</item>
+        <!--退场动画-->
+        <item name="android:windowExitAnimation">@anim/out_left_to_right</item>
+    </style>
+
+    <!--底部弹出-->
+    <style name="AnimationBottomFade">
+        <!--进场动画-->
+        <item name="android:windowEnterAnimation">@anim/in_bottom_to_top</item>
+        <!--退场动画-->
+        <item name="android:windowExitAnimation">@anim/out_top_to_bottom</item>
+    </style>
+
+    <!--“+”-->
+    <style name="AnimationPopupAdd">
+        <item name="android:windowEnterAnimation">@anim/popup_add_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_add_hide</item>
+    </style>
+
+    <!--开关按钮-->
+    <declare-styleable name="SwitchButton">
+        <attr name="sb_shadow_radius" format="reference|dimension"/>
+        <attr name="sb_shadow_offset" format="reference|dimension"/>
+        <attr name="sb_shadow_color" format="reference|color"/>
+        <attr name="sb_uncheck_color" format="reference|color"/>
+        <attr name="sb_checked_color" format="reference|color"/>
+        <attr name="sb_border_width" format="reference|dimension"/>
+        <attr name="sb_checkline_color" format="reference|color"/>
+        <attr name="sb_checkline_width" format="reference|dimension"/>
+        <attr name="sb_uncheckcircle_color" format="reference|color"/>
+        <attr name="sb_uncheckcircle_width" format="reference|dimension"/>
+        <attr name="sb_uncheckcircle_radius" format="reference|dimension"/>
+        <attr name="sb_checked" format="reference|boolean"/>
+        <attr name="sb_shadow_effect" format="reference|boolean"/>
+        <attr name="sb_effect_duration" format="reference|integer"/>
+        <attr name="sb_button_color" format="reference|color"/>
+        <attr name="sb_show_indicator" format="reference|boolean"/>
+        <attr name="sb_background" format="reference|color"/>
+        <attr name="sb_enable_effect" format="reference|boolean"/>
+    </declare-styleable>
+
 </resources>
