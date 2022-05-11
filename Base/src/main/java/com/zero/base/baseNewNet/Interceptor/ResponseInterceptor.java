@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import okhttp3.Interceptor;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * 返回拦截器(响应拦截器)

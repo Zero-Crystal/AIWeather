@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import com.zero.aiweather.model.AdviceResponse;
 import com.zero.aiweather.model.AirQualityResponse;
 import com.zero.aiweather.model.BiYingImgResponse;
-import com.zero.aiweather.model.CityResponse;
 import com.zero.aiweather.model.CitySearchResponse;
 import com.zero.aiweather.model.HourlyResponse;
 import com.zero.aiweather.netApi.ApiService;
@@ -21,7 +20,7 @@ import com.zero.base.util.KLog;
  * 天气订阅类
  * */
 public class WeatherContract {
-    public static class WeatherPresenter extends BasePresenter<IView> {
+    public static class WeatherPresenter extends BasePresenter<IWeatherView> {
         /**
          * 获取实时天气
          * */
@@ -195,7 +194,7 @@ public class WeatherContract {
         }
     }
 
-    public interface IView extends IBaseView {
+    public interface IWeatherView extends IBaseView {
         /**
          * 展示实时天气
          * */

@@ -57,7 +57,7 @@ public class PreviewActivity extends BaseActivity {
                         finish();
                     });
         } else {
-            ToastUtil.toastShort("你的版本在Android6.0以下，不需要动态申");
+            ToastUtil.toastShort("你的版本在Android6.0以下，不需要动态申请");
         }
     }
 

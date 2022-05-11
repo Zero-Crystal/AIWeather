@@ -32,7 +32,6 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation project(path: ':Resourse')
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -80,4 +79,6 @@ dependencies {
 
     //自由嵌套的RadioGroup
     api 'com.github.fodroid:XRadioGroup:v1.5'
+
+    api 'com.lzy.net:okgo:2.1.4'
 }

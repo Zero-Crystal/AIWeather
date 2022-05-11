@@ -25,6 +25,7 @@ import com.zero.aiweather.utils.CameraUtil;
 import com.zero.aiweather.utils.Constant;
 import com.zero.aiweather.utils.PopupWindowUtil;
 import com.zero.aiweather.utils.SPUtil;
+import com.zero.aiweather.utils.StatusBarUtil;
 import com.zero.aiweather.utils.ToastUtil;
 import com.zero.aiweather.view.SwitchButton;
 import com.zero.base.base.BaseActivity;
@@ -90,6 +91,7 @@ public class SettingsActivity extends BaseActivity {
         binding.tbToolbar.setTitle("");
         setSupportActionBar(binding.tbToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        StatusBarUtil.fitTitleBar(this, binding.tbToolbar);
         Back(binding.tbToolbar);
     }
 

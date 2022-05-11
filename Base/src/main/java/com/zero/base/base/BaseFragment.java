@@ -22,6 +22,8 @@ import java.util.Objects;
  * */
 public abstract class BaseFragment extends Fragment implements IUiCallBack {
     private Activity context;
+    private LayoutInflater inflater;
+    private ViewGroup container;
     //弹窗
     private Dialog mDialog;
 
@@ -42,6 +44,8 @@ public abstract class BaseFragment extends Fragment implements IUiCallBack {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.inflater = inflater;
+        this.container = container;
         return getLayoutView();
     }
 
@@ -83,5 +87,13 @@ public abstract class BaseFragment extends Fragment implements IUiCallBack {
             mDialog.dismiss();
         }
         mDialog = null;
+    }
+
+    public LayoutInflater getInflater() {
+        return inflater;
+    }
+
+    public ViewGroup getContainer() {
+        return container;
     }
 }

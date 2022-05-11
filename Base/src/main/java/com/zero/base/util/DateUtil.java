@@ -20,6 +20,12 @@ public class DateUtil {
         return sdf.format(new Date());
     }
 
+    //获取当前时间
+    public static String getTimeNow() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        return sdf.format(new Date());
+    }
+
     //昨天
     public static String getYesterday(Date date) {
         String tomorrow = "";

@@ -2,8 +2,8 @@ package com.zero.aiweather.utils;
 
 import androidx.core.content.ContextCompat;
 
+import com.zero.aiweather.R;
 import com.zero.base.BaseApplication;
-import com.zero.base.R;
 
 public class WeatherUtil {
 

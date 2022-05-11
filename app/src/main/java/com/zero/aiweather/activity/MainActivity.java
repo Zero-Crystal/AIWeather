@@ -2,6 +2,10 @@ package com.zero.aiweather.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +18,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +38,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.zero.aiweather.fragment.SearchResultFragment;
 import com.zero.aiweather.R;
 import com.zero.aiweather.adapter.AdviceAdapter;
 import com.zero.aiweather.adapter.AreaAdapter;
@@ -56,8 +64,10 @@ import com.zero.aiweather.utils.GPSUtil;
 import com.zero.aiweather.utils.PopupWindowUtil;
 import com.zero.aiweather.utils.RecyclerViewAnimation;
 import com.zero.aiweather.utils.SPUtil;
+import com.zero.aiweather.utils.StatusBarUtil;
 import com.zero.aiweather.utils.ToastUtil;
 import com.zero.aiweather.utils.WeatherUtil;
+import com.zero.aiweather.viewModel.SearchViewModel;
 import com.zero.base.BaseApplication;
 import com.zero.base.baseMvpNet.MvpActivity;
 import com.zero.base.util.DateUtil;
@@ -74,7 +84,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> implements WeatherContract.IView {
+public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> implements WeatherContract.IWeatherView {
     private ActivityMainBinding binding;
     private LocationClient locationClient;
     private List<Day7Response.Daily> forecastList = new ArrayList<>();
@@ -101,6 +111,7 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
     private static final float START_ALPHA = 0.7f;//开始透明度
     private static final float END_ALPHA = 1f;//结束透明度
     private PopupWindow mPopupWindowAdd;
+    private SearchViewModel searchViewModel;
 
     @Override
     protected WeatherContract.WeatherPresenter createPresenter() {
@@ -115,12 +126,18 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
 
     @Override
     public void initDate(Bundle saveInstanceState) {
+        animUtil = new AnimationUtil();
+        mPopupWindowAdd = new PopupWindow(this);
+        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+        //添加搜索结果页
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(binding.flSearchResult.getId(), SearchResultFragment.getInstance(searchViewModel));
+        ft.commit();
         initToolBar();
         initLocation();
         initList();
         initListener();
-        animUtil = new AnimationUtil();
-        mPopupWindowAdd = new PopupWindow(this);
     }
 
     @Override
@@ -134,6 +151,7 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
         binding.tbTitle.setTitle("");
         setSupportActionBar(binding.tbTitle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        StatusBarUtil.fitTitleBar(this, binding.tbTitle);
     }
 
     private void initLocation() {
@@ -175,12 +193,78 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
             }
         });
         //"+"右侧弹窗
-        binding.ivAdd.setOnClickListener(new View.OnClickListener() {
+        binding.ivBarAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAddPopupWindow();
             }
         });
+        //左上搜索图标
+        binding.tbTitle.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (binding.flSearchResult.getVisibility() == View.VISIBLE) {
+                    showWeatherPage();
+                } else {
+                    showSearchResultPage();
+                }
+            }
+        });
+        //监听编辑栏输入
+        binding.etBarSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String inputLocation = editable.toString();
+                searchViewModel.setInputLocation(inputLocation);
+                Log.d("SearchResultFragment", "afterTextChanged: >>>>>>>>>>>>>>>>>>> edit: " + inputLocation);
+            }
+        });
+        searchViewModel.getCitySearchResult().observe(this, new Observer<CitySearchResponse.Location>() {
+            @Override
+            public void onChanged(CitySearchResponse.Location location) {
+                if (location != null) {
+                    Log.d("SearchResultFragment", "onChanged: <<<<<<<<<<<<<<<<<<<< result: " + location.getName() + ", " + location.getId());
+                    showWeatherPage();
+                    //更新数据
+                    binding.tvLocation.setText(location.getName());
+                    presenterWeather(location.getId());
+                }
+            }
+        });
+    }
+
+    private void showSearchResultPage() {
+        binding.tbTitle.setNavigationIcon(R.mipmap.icon_reuturn);
+        //显示编辑栏，隐藏标题
+        binding.llBarSearch.setVisibility(View.VISIBLE);
+        binding.tvBarTitle.setVisibility(View.GONE);
+        binding.ivBarAdd.setVisibility(View.GONE);
+        //显示搜索结果，隐藏天气页
+        binding.flSearchResult.setVisibility(View.VISIBLE);
+        binding.srlRefresh.setVisibility(View.GONE);
+    }
+
+    private void showWeatherPage() {
+        binding.tbTitle.setNavigationIcon(R.mipmap.icon_query);
+        //清除上次输入搜索内容
+        binding.etBarSearch.setText("");
+        //显示标题，隐藏编辑栏
+        binding.llBarSearch.setVisibility(View.GONE);
+        binding.tvBarTitle.setVisibility(View.VISIBLE);
+        binding.ivBarAdd.setVisibility(View.VISIBLE);
+        //显示天气页，隐藏搜索结果
+        binding.flSearchResult.setVisibility(View.GONE);
+        binding.srlRefresh.setVisibility(View.VISIBLE);
     }
 
     public void showAddPopupWindow() {
@@ -192,7 +276,7 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
         mPopupWindowAdd.setOutsideTouchable(true);
         mPopupWindowAdd.setFocusable(true);
         mPopupWindowAdd.setAnimationStyle(R.style.AnimationPopupAdd);
-        mPopupWindowAdd.showAsDropDown(binding.ivAdd, -100, 0);
+        mPopupWindowAdd.showAsDropDown(binding.ivBarAdd, -100, 0);
         mPopupWindowAdd.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -361,15 +445,10 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
         } else {
             KLog.i("---------------------> 定位未打开");
             isGpsOpen = false;
-            showLoadingDialog();
             ToastUtil.toastShort("定位未打开");
             location = SPUtil.getString(Constant.LOCATION, "101010100");
             binding.tvLocation.setText(SPUtil.getString(Constant.DISTRICT, "北京"));
-            mPresenter.getWeatherNow(location);
-            mPresenter.getWeatherHourly(location);
-            mPresenter.getWeatherDay7(location);
-            mPresenter.getAirQuality(location);
-            mPresenter.getLifeAdvice(location);
+            presenterWeather(location);
         }
     }
 
@@ -440,7 +519,7 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
         binding.srlRefresh.finishRefresh();
         locationClient.stop();
         hideLoadingDialog();
-        if (nowResponse.getNow() != null) {
+        if (nowResponse.getNow() != null && nowResponse.getNow() != null) {
             KLog.d("------------------> 更新实时天气");
             if (isGpsOpen) {
                 binding.ivLocation.setVisibility(View.VISIBLE);
@@ -465,7 +544,7 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
     public void showWeatherHourly(HourlyResponse hourlyResponse) {
         hideLoadingDialog();
         binding.srlRefresh.finishRefresh();
-        if (hourlyResponse != null) {
+        if (hourlyResponse != null && hourlyResponse.getHourly() != null) {
             hourlyList.clear();
             hourlyList.addAll(hourlyResponse.getHourly());
             hourlyAdapter.notifyDataSetChanged();
@@ -476,7 +555,7 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
     public void showWeather7Day(Day7Response day7Response) {
         hideLoadingDialog();
         binding.srlRefresh.finishRefresh();
-        if (day7Response != null) {
+        if (day7Response != null && day7Response.getDaily() != null) {
             KLog.d("------------------> 更新7天预报");
             String temHighLow = String.format(getResources().getString(R.string.temperature_high_low),
                     day7Response.getDaily().get(0).getTempMax(), day7Response.getDaily().get(0).getTempMin());
@@ -491,7 +570,7 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
     public void showLiftAdvice(AdviceResponse adviceResponse) {
         hideLoadingDialog();
         binding.srlRefresh.finishRefresh();
-        if (adviceResponse != null) {
+        if (adviceResponse != null && adviceResponse.getDaily() != null) {
             KLog.d("------------------> 更新生活指数");
             adviceList.clear();
             adviceList.addAll(adviceResponse.getDaily());
@@ -541,25 +620,34 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
     public void showAirQuality(AirQualityResponse airQualityResponse) {
         hideLoadingDialog();
         binding.srlRefresh.finishRefresh();
-        if (airQualityResponse != null) {
+        if (airQualityResponse != null && airQualityResponse.getNow() != null) {
             KLog.d("------------------> 更新空气质量");
-            String pm10 = String.format(getResources().getString(R.string.tv_pm10), airQualityResponse.getNow().getPm10());
-            String pm25 = String.format(getResources().getString(R.string.tv_pm25), airQualityResponse.getNow().getPm2p5());
-            String no2 = String.format(getResources().getString(R.string.tv_no2), airQualityResponse.getNow().getNo2());
-            String so2 = String.format(getResources().getString(R.string.tv_so2), airQualityResponse.getNow().getSo2());
-            String co = String.format(getResources().getString(R.string.tv_co), airQualityResponse.getNow().getCo());
-            String o3 = String.format(getResources().getString(R.string.tv_o3), airQualityResponse.getNow().getO3());
-            binding.tvPm10.setText(pm10);
-            binding.tvPm25.setText(pm25);
-            binding.tvNo2.setText(no2);
-            binding.tvSo2.setText(so2);
-            binding.tvCo.setText(co);
-            binding.tvO3.setText(o3);
+            String pm10 = TextUtils.isEmpty(airQualityResponse.getNow().getPm10()) ? " " : airQualityResponse.getNow().getPm10();
+            String pm25 = TextUtils.isEmpty(airQualityResponse.getNow().getPm2p5()) ? " " : airQualityResponse.getNow().getPm2p5();
+            String no2 = TextUtils.isEmpty(airQualityResponse.getNow().getNo2()) ? " " : airQualityResponse.getNow().getNo2();
+            String so2 = TextUtils.isEmpty(airQualityResponse.getNow().getSo2()) ? " " : airQualityResponse.getNow().getSo2();
+            String co = TextUtils.isEmpty(airQualityResponse.getNow().getCo()) ? " " : airQualityResponse.getNow().getCo();
+            String o3 = TextUtils.isEmpty(airQualityResponse.getNow().getO3()) ? " " : airQualityResponse.getNow().getO3();
+            binding.tvPm10.setText(String.format(getResources().getString(R.string.tv_pm10), pm10));
+            binding.tvPm25.setText(String.format(getResources().getString(R.string.tv_pm25), pm25));
+            binding.tvNo2.setText(String.format(getResources().getString(R.string.tv_no2), no2));
+            binding.tvSo2.setText(String.format(getResources().getString(R.string.tv_so2), so2));
+            binding.tvCo.setText(String.format(getResources().getString(R.string.tv_co), co));
+            binding.tvO3.setText(String.format(getResources().getString(R.string.tv_o3), o3));
             binding.cpvProgress.setAqi(airQualityResponse.getNow().getAqi());
             binding.cpvProgress.setLevel(airQualityResponse.getNow().getCategory());
             binding.cpvProgress.setProgressColor(WeatherUtil.getAirAqiColor(Integer.parseInt(airQualityResponse.getNow().getLevel())));
-            binding.cpvProgress.startAnimator();
+        } else {
+            binding.tvPm10.setText(String.format(getResources().getString(R.string.tv_pm10), "null"));
+            binding.tvPm25.setText(String.format(getResources().getString(R.string.tv_pm25), "null"));
+            binding.tvNo2.setText(String.format(getResources().getString(R.string.tv_no2), "null"));
+            binding.tvSo2.setText(String.format(getResources().getString(R.string.tv_so2), "null"));
+            binding.tvCo.setText(String.format(getResources().getString(R.string.tv_co), "null"));
+            binding.tvO3.setText(String.format(getResources().getString(R.string.tv_o3), "null"));
+            binding.cpvProgress.setAqi("0");
+            binding.cpvProgress.setLevel("null");
         }
+        binding.cpvProgress.startAnimator();
     }
 
     @Override
@@ -619,14 +707,18 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
             //显示定位
             binding.tvLocation.setText(district);
             //获取数据
-            showLoadingDialog();
-            mPresenter.getWeatherNow(location);
-            mPresenter.getWeatherHourly(location);
-            mPresenter.getWeatherDay7(location);
-            mPresenter.getAirQuality(location);
-            mPresenter.getLifeAdvice(location);
+            presenterWeather(location);
             KLog.d("------------------> 定位方式：" + bdLocation.getLocTypeDescription());
             KLog.d("------------------> location=" + location + ", " + district);
         }
+    }
+
+    private void presenterWeather(String location) {
+        showLoadingDialog();
+        mPresenter.getWeatherNow(location);
+        mPresenter.getWeatherHourly(location);
+        mPresenter.getWeatherDay7(location);
+        mPresenter.getAirQuality(location);
+        mPresenter.getLifeAdvice(location);
     }
 }

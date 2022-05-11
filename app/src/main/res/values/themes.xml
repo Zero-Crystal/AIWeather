@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/blue_20</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="colorAccent">@color/purple_200</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>

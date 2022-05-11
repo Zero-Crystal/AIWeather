@@ -2,9 +2,11 @@ package com.zero.aiweather.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -15,6 +17,41 @@ import java.lang.reflect.Method;
  * 状态栏工具类
  */
 public class StatusBarUtil {
+
+    /**
+     * 修改状态栏为全透明
+     *
+     * @param activity
+     * @param toolBar
+     */
+    public static void fitTitleBar(Activity activity, final View toolBar) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
+        transparencyBar(activity);
+        final ViewGroup.LayoutParams layoutParams = toolBar.getLayoutParams();
+        assert layoutParams != null;
+        if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT ||
+                layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            toolBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    layoutParams.height = toolBar.getHeight() + getStatusBarHeight();
+                    toolBar.setPadding(toolBar.getPaddingLeft(),
+                            toolBar.getPaddingTop() + getStatusBarHeight(),
+                            toolBar.getPaddingRight(),
+                            toolBar.getPaddingBottom());
+                }
+            });
+        } else {
+            layoutParams.height += getStatusBarHeight();
+            toolBar.setPadding(toolBar.getPaddingLeft(),
+                    toolBar.getPaddingTop() + getStatusBarHeight(),
+                    toolBar.getPaddingRight(),
+                    toolBar.getPaddingBottom());
+        }
+    }
+
     /**
      * 修改状态栏为全透明
      *
@@ -187,6 +224,12 @@ public class StatusBarUtil {
             }
         }
         return result;
+    }
+
+    public static int getStatusBarHeight() {
+        Resources resources = Resources.getSystem();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        return resources.getDimensionPixelSize(resourceId);
     }
 
 }

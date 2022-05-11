@@ -1,0 +1,208 @@
+apply plugin: 'com.android.application'
+// 应用 com.sensorsdata.analytics.android 插件
+apply plugin: 'com.sensorsdata.analytics.android'
+def sensors = rootProject.ext.sensors
+android {
+    compileSdkVersion 28
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        applicationId 'com.txx.app.webview'
+        multiDexEnabled true
+        minSdkVersion 21
+        targetSdkVersion 23
+        versionCode 115
+        versionName "1.0"
+        manifestPlaceholders.put("PLUGIN_NAME", project.name)
+        manifestPlaceholders.put("PLUGIN_VALUE", versionCode)
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to check for errors in release builds,
+            // but continue the build even when errors are found:
+            abortOnError false
+        }
+    dexOptions {
+        jumboMode true
+
+    }
+    signingConfigs {
+        debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            //获取keystore 里面相关信息
+            def keystoreProFile = rootProject.file("keystore.properties")
+            def keystoreProes = new Properties()
+            keystoreProes.load(new FileInputStream(keystoreProFile))
+            keyAlias keystoreProes["keyAlias"]
+            keyPassword keystoreProes["storePassword"]
+            storeFile file(keystoreProes['keystore'])
+            storePassword keystoreProes["keyPassword"]
+        }
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            //获取keystore 里面相关信息
+            def keystoreProFile = rootProject.file("keystore.properties")
+            def keystoreProes = new Properties()
+            keystoreProes.load(new FileInputStream(keystoreProFile))
+            keyAlias keystoreProes["keyAlias"]
+            keyPassword keystoreProes["storePassword"]
+            storeFile file(keystoreProes['keystore'])
+            storePassword keystoreProes["keyPassword"]
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+            buildConfigField("boolean", "IS_DEBUG", "false")         //release模式
+            buildConfigField("int", "NET_OUT_TIME", "20000")         //网络请求超时时间
+            buildConfigField "String", "TCAGENT", "\"tkrs_isales_Android_release\""
+            buildConfigField "String", "TCAGENT_NEW", "\"release\""
+            buildConfigField "String", "ISALE_URL", "\"https://isales.taikang.com/\""
+            //isale正式环境
+            buildConfigField "String", "SSP_URL", "\"https://ssp.taikang.com/\""
+            buildConfigField "String", "ISALE_IM_URL", "\"https://isalesact.taikang.com/\""
+            //ssp正式环境
+            buildConfigField "String", "SSP_BASIC_URL", "\"https://ssp.taikang.com/basic/\""
+            buildConfigField "String", "PLANBOOKLIST", "\"https://planbook.taikang.com/planbookv2/list/index.html#/\""
+
+            buildConfigField "String", "MAINPLANBOOKLIST", "\"https://planbook.taikang.com/\""
+            buildConfigField "String", "MSG_YK", "\"https://ssp.taikang.com/customer/h5/ykRemind/index.html#/\"" // 养客提醒生产
+            buildConfigField "String", "LOVE_BAO_LINK", "\"https://ssp.taikang.com/prd/static/huoke/loveBao/index.html?\"" // 爱心保
+            buildConfigField "String", "H5_LIVE", "\"https://txxlive.taikang.com/static/directSeeding/index.html#/?hasTitle=y\""//直播点播H5生产
+            buildConfigField "String", "H5_LIVE_DB", "\"https://txxlive.taikang.com/static/playbacklive/index.html#/videoStaticList?hasTitle=y&tabId=\""//直播点播H5生产
+            buildConfigField "String", "HK_QRCODE", "\"https://ssp.taikang.com/prd/static/huoke/QRDetail/index.html#/\""//获客二维码生产
+            buildConfigField "String", "SENSORS", "\"${sensors.SA_SERVER_URL_RELEASE}\""
+            buildConfigField "String", "VR_APP_SECRET","\"VRECX6WT7ZMSB3HILTLCBV5OLCDY6VI9\""
+        }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+
+            buildConfigField("boolean", "IS_DEBUG", "true")         //debug模式
+            buildConfigField("int", "NET_OUT_TIME", "120000")       //网络请求超时时间
+            buildConfigField "String", "TCAGENT", "\"tkrs_isales_Android_debug\""
+            buildConfigField "String", "TCAGENT_NEW", "\"debug\""
+            buildConfigField "String", "ISALE_URL", "\"https://isaleuat.taikang.com/\""
+            buildConfigField "String", "ISALE_IM_URL", "\"https://isaleuat.taikang.com/\""
+            //
+            buildConfigField "String", "SSP_URL", "\"https://sspuat.taikang.com/\""
+            //ssp测试环境
+            buildConfigField "String", "SSP_BASIC_URL", "\"https://sspuat.taikang.com/\""
+            buildConfigField "String", "PLANBOOKLIST", "\"https://planbookuat.taikang.com/planbookv2/list/index.html#/\""//计划书列表
+
+            buildConfigField "String", "MAINPLANBOOKLIST", "\"https://planbookuat.taikang.com/\""//首页计划书列表
+            buildConfigField "String", "MSG_YK", "\"https://sspuat.taikang.com/customer/h5/ykRemind/index.html#/\"" // 养客提醒
+            buildConfigField "String", "LOVE_BAO_LINK", "\"https://sspuat.taikang.com/prd/huoke/loveBao/index.html?\"" // 爱心保
+            buildConfigField "String", "H5_LIVE", "\"https://txxliveuat.taikang.com/static/directSeeding/index.html#/?hasTitle=y\""//直播点播H5测试
+            buildConfigField "String", "H5_LIVE_DB", "\"https://txxliveuat.taikang.com/static/playbacklive/index.html#/videoStaticList?hasTitle=y&tabId=\""//直播点播H5生产
+            buildConfigField "String", "HK_QRCODE", "\"https://sspuat.taikang.com/prd/huoke/QRDetail/index.html#/\""//获客二维码测试
+            buildConfigField "String", "SENSORS", "\"${sensors.SA_SERVER_URL_DEBUG}\""
+            buildConfigField "String", "VR_APP_SECRET","\"LTLCBV5OLCDY6VI9VRECX6WT7ZMSB3HI\""
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${project.name}_${variant.buildType.name}" +
+                    "_v${defaultConfig.versionCode}" +
+                    "_${new Date().format("yyyy-MM-dd_HH-mm-ss", TimeZone.getTimeZone("GMT+08:00"))}" +
+                    ".apk"
+        }
+    }
+}
+
+
+dependencies {
+    // 添加 RePlugin Plugin Library 依赖
+    compile 'com.qihoo360.replugin:replugin-plugin-lib:2.3.4'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support.constraint:constraint-layout:1.1.0'
+    testCompile 'junit:junit:4.12'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    provided fileTree(include: ['*.jar'], dir: 'providedLibs')
+    /*----- app support依赖 -----*/
+    compile 'com.android.support:appcompat-v7:28.0.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    /*-----  网络依赖 rxjava1  -----*/
+    compile 'io.reactivex:rxjava:1.2.9'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.7.0'
+
+    /*----- H5webview 插件所需依赖 -----*/
+    compile project(':function_qrcode')
+    compile project(':function_imagepicker')
+    compile project(':ppw')
+    compile project(':zxing')//新版Zxing库
+//    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+//    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.bm.photoview:library:1.4.1'
+    compile 'com.github.CarGuo:RecordWave:v1.1.3'
+    /*----- H5webview 智能分享-----*/
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-3'
+    compile 'commons-codec:commons-codec:20041127.091804'
+    compile project(':function_andpermission')
+    /*----- H5webview 下载功能-----*/
+    compile project(':downloadlib')
+    // 添加 Sensors Analytics SDK 依赖
+    compile 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:4.2.8'
+  //  compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    compile(name: 'tkpay_release_1.0.2', ext: 'aar') // 双录
+    compile(name: 'alipaySdk-15.7.4-20200228192259', ext: 'aar')
+    compile 'org.litepal.android:core:1.5.1'
+    compile(name: 'rsvr-01000018-20211103', ext: 'aar')
+    compile(name: 'crop_lib', ext: 'aar')
+    compile(name: 'ocr_collection_lib', ext: 'aar')
+    compile 'com.android.support:multidex:1.0.1'
+    compile (project(':tuikit')) {
+        exclude group: 'com.tencent.liteav'
+        exclude group: 'com.github.bumptech.glide'
+    }
+    // 协程
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.21"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha01"
+    //今日头条 适配方案
+    implementation 'me.jessyan:autosize:1.2.1'
+//图片加载
+//    implementation "com.github.bumptech.glide:glide:4.12.0"
+    //android UI控件
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.activity:activity:1.3.0"
+    implementation "androidx.fragment:fragment:1.3.6"
+    //okhttp3
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+}
+
+
+apply plugin: 'replugin-plugin-gradle'
+repluginPluginConfig {
+    // 宿主Module名称
+    appModule = ':app'
+    // 插件名称
+    pluginName = "app.webview"
+    // 宿主app的包名
+    hostApplicationId = "com.taikanglife.isalessystem"
+    // 宿主app的启动activity
+    hostAppLauncherActivity = "com.taikanglife.isalessystem.common.activity.StartActivity"
+}
