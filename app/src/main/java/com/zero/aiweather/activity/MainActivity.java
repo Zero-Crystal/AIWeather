@@ -22,6 +22,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,6 +113,8 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
     private static final float END_ALPHA = 1f;//结束透明度
     private PopupWindow mPopupWindowAdd;
     private SearchViewModel searchViewModel;
+
+    private long exitTime = 0;
 
     @Override
     protected WeatherContract.WeatherPresenter createPresenter() {
@@ -452,6 +455,15 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
         }
     }
 
+    private void presenterWeather(String location) {
+        showLoadingDialog();
+        mPresenter.getWeatherNow(location);
+        mPresenter.getWeatherHourly(location);
+        mPresenter.getWeatherDay7(location);
+        mPresenter.getAirQuality(location);
+        mPresenter.getLifeAdvice(location);
+    }
+
     private void displayBackground() {
         boolean isImgBiYing = SPUtil.getBoolean(Constant.BIYING_IMG, false);
         boolean isImgList = SPUtil.getBoolean(Constant.LIST_IMG, false);
@@ -713,12 +725,28 @@ public class MainActivity extends MvpActivity<WeatherContract.WeatherPresenter> 
         }
     }
 
-    private void presenterWeather(String location) {
-        showLoadingDialog();
-        mPresenter.getWeatherNow(location);
-        mPresenter.getWeatherHourly(location);
-        mPresenter.getWeatherDay7(location);
-        mPresenter.getAirQuality(location);
-        mPresenter.getLifeAdvice(location);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (binding.flSearchResult.getVisibility() == View.VISIBLE) {
+                    showWeatherPage();
+                } else {
+                    exit();
+                }
+                break;
+        }
+        return true;
     }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            ToastUtil.toastShort("再按一次退出程序");
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
+        }
+    }
+
 }
