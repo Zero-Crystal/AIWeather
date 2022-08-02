@@ -1,4 +1,4 @@
-package com.zero.aiweather.activity;
+package com.zero.aiweather.view;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -27,7 +27,7 @@ import com.zero.aiweather.utils.PopupWindowUtil;
 import com.zero.aiweather.utils.SPUtil;
 import com.zero.aiweather.utils.StatusBarUtil;
 import com.zero.aiweather.utils.ToastUtil;
-import com.zero.aiweather.view.SwitchButton;
+import com.zero.aiweather.widget.SwitchButton;
 import com.zero.base.base.BaseActivity;
 import com.zero.base.util.KLog;
 
@@ -75,10 +75,10 @@ public class SettingsActivity extends BaseActivity {
                     }
                     if (!TextUtils.isEmpty(imagePath)) {
                         SPUtil.putString(Constant.PHONE_IMG_PATH, imagePath);
-                        ToastUtil.toastShort("背景更换成功！");
+                        ToastUtil.showToast("背景更换成功！");
                     } else {
                         binding.sbImgPhone.setChecked(false);
-                        ToastUtil.toastShort("背景更换失败！");
+                        ToastUtil.showToast("背景更换失败！");
                     }
                 }
                 break;
@@ -181,7 +181,7 @@ public class SettingsActivity extends BaseActivity {
                         startActivityForResult(selectPhoneIntent, Constant.SELECT_PHOTO);
                     } else {
                         binding.sbImgPhone.setChecked(false);
-                        ToastUtil.toastShort("权限未开启！");
+                        ToastUtil.showToast("权限未开启！");
                         KLog.i("授权失败，权限未开启");
                     }
                 });
@@ -244,7 +244,7 @@ public class SettingsActivity extends BaseActivity {
                         SPUtil.putInt(Constant.LIST_IMG_POSITION, 5);
                         break;
                 }
-                ToastUtil.toastShort("壁纸已更换！");
+                ToastUtil.showToast("壁纸已更换！");
             }
         });
         popupUtil.showBottomPopupWindow(listImgBinding.getRoot(), new PopupWindow.OnDismissListener() {

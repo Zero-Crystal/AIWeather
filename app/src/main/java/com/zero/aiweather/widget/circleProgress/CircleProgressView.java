@@ -1,15 +1,19 @@
-package com.zero.aiweather.view.circleProgress;
+package com.zero.aiweather.widget.circleProgress;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Size;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.Nullable;
@@ -17,7 +21,7 @@ import androidx.core.content.ContextCompat;
 
 import com.zero.aiweather.R;
 import com.zero.aiweather.utils.DensityUtil;
-import com.zero.base.util.KLog;
+import com.zero.aiweather.utils.TimeUtil;
 import com.zero.base.util.LogUtils;
 
 import java.math.BigDecimal;
@@ -55,7 +59,11 @@ public class CircleProgressView extends View {
 
     private Paint paint;
     private int defaultColor = getResources().getColor(R.color.white_70);
-    private boolean isFirst = true;
+
+    /** 进度条可见*/
+    public static final int PROGRESS_VISIBLE = 001;
+    /** 进度条不可见*/
+    public static final int PROGRESS_INVISIBLE = 000;
 
     public CircleProgressView(Context context) {
         this(context, null);
@@ -102,7 +110,6 @@ public class CircleProgressView extends View {
         //绘制Aqi
         Rect aqiRect = new Rect();
         paint.getTextBounds(aqi, 0, aqi.length(), aqiRect);
-        Log.i(TAG, "onDraw: ---------> aqiHeight=" + aqiRect.height());
         drawText(canvas, aqi, aqiRect.height() + Math.round(textVerticalInterval / 2));
 
         //绘制背景圆弧
@@ -141,9 +148,18 @@ public class CircleProgressView extends View {
         });
         animator.setInterpolator(new DecelerateInterpolator());
         animator.setDuration(2 * 1000);
-        if (isFirst) {
-            animator.start();
-            isFirst = false;
+        animator.start();
+    }
+
+    public boolean isVisibleInScreen() {
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Rect screenRect = new Rect();
+        display.getRectSize(screenRect);
+        if (getLocalVisibleRect(screenRect)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -151,10 +167,9 @@ public class CircleProgressView extends View {
         if (endNum > 300) {
             sweepAngle = 240;
         } else {
-            sweepAngle = Math.round(240 * div(endNum, maxProgress, 2));
+            sweepAngle = Math.round(240 * TimeUtil.div(endNum, maxProgress, 2));
         }
         LogUtils.d(TAG, TAG + ": 计算角度=" + sweepAngle);
-        isFirst = true;
         invalidate();
     }
 
@@ -173,23 +188,5 @@ public class CircleProgressView extends View {
 
     public void setMaxProgress(int maxProgress) {
         this.maxProgress = maxProgress;
-    }
-
-    /**
-     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指
-     * 定精度，以后的数字四舍五入。
-     * @param v1 被除数
-     * @param v2 除数
-     * @param scale 表示表示需要精确到小数点以后几位。
-     * @return 两个参数的商
-     */
-    public static double div(double v1, double v2, int scale) {
-        if (scale < 0) {
-            throw new IllegalArgumentException(
-                    "The scale must be a positive integer or zero");
-        }
-        BigDecimal b1 = new BigDecimal(Double.toString(v1));
-        BigDecimal b2 = new BigDecimal(Double.toString(v2));
-        return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }

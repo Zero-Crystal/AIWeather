@@ -19,6 +19,18 @@ public class PopupWindowUtil {
     }
 
     /**
+     * view-顶部
+     * */
+    public void showTopPopupWindow(View view) {
+        mPopupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setContentView(view);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setAnimationStyle(R.style.AnimationBottomFade);
+        mPopupWindow.showAsDropDown(view, 0, 0);
+    }
+
+    /**
      * 右侧，高度自适应
      * */
     public void showRightPopupWindow(View view) {
@@ -28,7 +40,7 @@ public class PopupWindowUtil {
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setAnimationStyle(R.style.AnimationRightFade);
-        mPopupWindow.showAtLocation(view, Gravity.RIGHT|Gravity.TOP, 0, 0);
+        mPopupWindow.showAtLocation(view, Gravity.RIGHT|Gravity.TOP, 0, 279);
     }
 
     /**

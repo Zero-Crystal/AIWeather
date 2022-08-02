@@ -15,6 +15,7 @@
     <color name="gray_90">#1A999999</color>
     <color name="gray_70">#4D999999</color>
     <color name="gray_50">#80999999</color>
+    <color name="gray">#999999</color>
     <!-- 蓝色-->
     <color name="blue_90">#1A3399ff</color>
     <color name="blue_70">#4D3399ff</color>

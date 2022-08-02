@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,27 +16,27 @@ import com.zero.aiweather.contract.SearchContract;
 import com.zero.aiweather.databinding.FragmentSearchResultBinding;
 import com.zero.aiweather.model.CitySearchResponse;
 import com.zero.aiweather.utils.ToastUtil;
+import com.zero.aiweather.view.IBackListener;
 import com.zero.aiweather.viewModel.SearchViewModel;
 import com.zero.base.baseMvpNet.MvpFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResultFragment extends MvpFragment<SearchContract.SearchPresenter> implements SearchContract.ISearchView {
+public class SearchFragment extends MvpFragment<SearchContract.SearchPresenter> implements SearchContract.ISearchView {
     private final String TAG = "SearchResultFragment";
-    private static SearchResultFragment fragment;
+    private static SearchFragment fragment;
     private FragmentSearchResultBinding binding;
     private SearchViewModel searchViewModel;
     private List<CitySearchResponse.Location> resultList = new ArrayList<>();
     private SearchResultAdapter searchAdapter;
 
-    public SearchResultFragment(SearchViewModel searchViewModel) {
-        this.searchViewModel = searchViewModel;
-    }
+    private IBackListener backListener;
 
-    public static SearchResultFragment getInstance(SearchViewModel searchViewModel) {
+    public static SearchFragment newInstance(IBackListener backListener) {
         if (fragment == null) {
-            fragment = new SearchResultFragment(searchViewModel);
+            fragment = new SearchFragment();
+            fragment.backListener = backListener;
         }
         return fragment;
     }
@@ -47,6 +48,7 @@ public class SearchResultFragment extends MvpFragment<SearchContract.SearchPrese
 
     @Override
     public void initDate(Bundle saveInstanceState) {
+        searchViewModel = ViewModelProviders.of(requireActivity()).get(SearchViewModel.class);
         initList();
         initListener();
     }
@@ -72,6 +74,7 @@ public class SearchResultFragment extends MvpFragment<SearchContract.SearchPrese
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 searchViewModel.setSearchResult(resultList.get(position));
+                backListener.onBack(SearchFragment.this);
             }
         });
     }
@@ -85,14 +88,16 @@ public class SearchResultFragment extends MvpFragment<SearchContract.SearchPrese
     @Override
     public void showSearchResult(CitySearchResponse citySearchResponse) {
         resultList.clear();
-        resultList.addAll(citySearchResponse.getLocation());
+        if (citySearchResponse.getLocation() != null) {
+            resultList.addAll(citySearchResponse.getLocation());
+            Log.d(TAG, "showSearchResult: <<<<<<<<<<<<<<<<<<<<<<<< result: "
+                    + citySearchResponse.getLocation().get(0).getName() + ", " + citySearchResponse.getLocation().get(0).getId());
+        }
         searchAdapter.notifyDataSetChanged();
-        Log.d(TAG, "showSearchResult: <<<<<<<<<<<<<<<<<<<<<<<< result: "
-                + citySearchResponse.getLocation().get(0).getName() + ", " + citySearchResponse.getLocation().get(0).getId());
     }
 
     @Override
     public void onFailure(String message) {
-        ToastUtil.toastShort(message);
+        ToastUtil.showToast(message);
     }
 }

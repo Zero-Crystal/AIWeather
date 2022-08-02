@@ -10,13 +10,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="@dimen/dp_16"
-        android:paddingBottom="@dimen/dp_16">
+        android:paddingBottom="@dimen/dp_16"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/iv_cities_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_back"
+            android:padding="@dimen/dp_10"
             android:layout_gravity="center_vertical"
             android:visibility="gone"/>
 
@@ -25,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_back"
+            android:padding="@dimen/dp_10"
             android:layout_gravity="center_vertical"
             android:visibility="gone"/>
 

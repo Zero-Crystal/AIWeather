@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AIWeather">
-        <activity android:name=".activity.SettingsActivity"></activity>
+        <activity android:name=".view.SettingsActivity"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -34,14 +34,14 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".activity.PreviewActivity">
+        <activity android:name=".view.PreviewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".view.MainActivity" />
     </application>
 
 </manifest>

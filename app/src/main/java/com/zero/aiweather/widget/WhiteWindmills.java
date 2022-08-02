@@ -1,4 +1,4 @@
-package com.zero.aiweather.view;
+package com.zero.aiweather.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

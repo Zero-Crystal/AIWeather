@@ -2,19 +2,23 @@ package com.zero.aiweather.contract;
 
 import android.annotation.SuppressLint;
 
+import com.zero.aiweather.model.AdviceModel;
 import com.zero.aiweather.model.AdviceResponse;
 import com.zero.aiweather.model.AirQualityResponse;
-import com.zero.aiweather.model.BiYingImgResponse;
 import com.zero.aiweather.model.CitySearchResponse;
 import com.zero.aiweather.model.HourlyResponse;
 import com.zero.aiweather.netApi.ApiService;
 import com.zero.aiweather.model.Day7Response;
 import com.zero.aiweather.model.NowResponse;
+import com.zero.aiweather.utils.WeatherUtil;
 import com.zero.base.base.BasePresenter;
 import com.zero.base.base.IBaseView;
 import com.zero.base.baseNewNet.NetWorkApi;
 import com.zero.base.baseNewNet.observer.BaseObserver;
 import com.zero.base.util.KLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 天气订阅类
@@ -131,7 +135,7 @@ public class WeatherContract {
                 @Override
                 public void onSuccess(AdviceResponse adviceResponse) {
                     if (getView() != null) {
-                        getView().showLiftAdvice(adviceResponse);
+                        getView().showLiftAdvice(getAdviceModelList(adviceResponse));
                     }
                 }
 
@@ -168,29 +172,16 @@ public class WeatherContract {
             }));
         }
 
-        /**
-         * 必应每日一图
-         * */
-        @SuppressLint("CheckResult")
-        public void getBiYingImage() {
-            ApiService apiService = NetWorkApi.createService(ApiService.class, 1);
-            apiService.getBiYingImage().compose(NetWorkApi.applySchedulers(new BaseObserver<BiYingImgResponse>() {
-                @Override
-                public void onSuccess(BiYingImgResponse biYingImgResponse) {
-                    if (getView() != null) {
-                        getView().showBiYingImage(biYingImgResponse);
-                    }
-                }
-
-                @Override
-                public void onFailure(Throwable e) {
-                    e.printStackTrace();
-                    if (getView() != null) {
-                        getView().onFailure("数据请求失败！");
-                    }
-                    KLog.e("数据请求失败！" + e.getMessage());
-                }
-            }));
+        private List<AdviceModel> getAdviceModelList(AdviceResponse adviceResponse) {
+            List<AdviceModel> adviceModelList = new ArrayList<>();
+            for (AdviceResponse.Daily advice : adviceResponse.getDaily()) {
+                AdviceModel adviceModel = new AdviceModel();
+                adviceModel.setAdviceDaily(advice);
+                adviceModel.setTitle(advice.getName().substring(0, 2));
+                adviceModel.setIconId(WeatherUtil.getAdviceIcon(advice.getType()));
+                adviceModelList.add(adviceModel);
+            }
+            return adviceModelList;
         }
     }
 
@@ -214,15 +205,12 @@ public class WeatherContract {
         /**
          * 展示生活指数
          * */
-        void showLiftAdvice(AdviceResponse adviceResponse);
+        void showLiftAdvice(List<AdviceModel> adviceModelList);
+//        void showLiftAdvice(AdviceResponse adviceResponse);
         /**
          * 展示城市id搜索
          * */
         void showCityId(CitySearchResponse citySearchResponse);
-        /**
-         * 展示必应每日一图
-         * */
-        void showBiYingImage(BiYingImgResponse biYingImgResponse);
         /**
          * 请求失败
          * */

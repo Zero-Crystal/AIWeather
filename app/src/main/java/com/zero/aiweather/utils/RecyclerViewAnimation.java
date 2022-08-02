@@ -26,7 +26,7 @@ public class RecyclerViewAnimation {
     public static void runLayoutAnimationRight(final RecyclerView recyclerView) {
         final Context context = recyclerView.getContext();
         final LayoutAnimationController controller =
-                new LayoutAnimationController(AnimationUtils.loadAnimation(context, R.anim.layout_animation_slide_right));
+                new LayoutAnimationController(AnimationUtils.loadAnimation(context, R.anim.item_animation_slide_right));
         recyclerView.setLayoutAnimation(controller);
         recyclerView.getAdapter().notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();

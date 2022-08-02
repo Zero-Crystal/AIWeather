@@ -1,4 +1,4 @@
-package com.zero.aiweather.view;
+package com.zero.aiweather.widget;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

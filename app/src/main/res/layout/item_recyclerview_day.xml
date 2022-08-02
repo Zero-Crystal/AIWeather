@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/tv_item_date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="left"
@@ -22,11 +22,11 @@
         android:id="@+id/iv_item_day"
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
-        android:src="@drawable/weather_qingzhuanduoyun" />
+        android:src="@drawable/icon_101" />
 
     <TextView
         android:id="@+id/tv_item_tem"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="right"

@@ -3,7 +3,6 @@ package com.zero.aiweather.netApi;
 import com.zero.aiweather.model.AdviceResponse;
 import com.zero.aiweather.model.AirQualityResponse;
 import com.zero.aiweather.model.BiYingImgResponse;
-import com.zero.aiweather.model.CityResponse;
 import com.zero.aiweather.model.CitySearchResponse;
 import com.zero.aiweather.model.Day7Response;
 import com.zero.aiweather.model.HourlyResponse;

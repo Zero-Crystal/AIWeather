@@ -1,4 +1,4 @@
-package com.zero.base.view;
+package com.zero.base.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -36,7 +36,7 @@ public class LoadingTextView extends AppCompatTextView {
             if (mViewWidth > 0) {
                 mPaint = getPaint();
                 mLinearGradient = new LinearGradient(-mViewWidth, 0, 0, 0,
-                        new int[]{0x33ffffff, 0xffd81e06, 0x33ffffff},
+                        new int[]{0x33ffffff, 0xfff4ea2a, 0x33ffffff},
                         new float[]{0, 0.5f, 1}, Shader.TileMode.CLAMP);
                 mPaint.setShader(mLinearGradient);
                 mGradientMatrix = new Matrix();
@@ -54,7 +54,7 @@ public class LoadingTextView extends AppCompatTextView {
             }
             mGradientMatrix.setTranslate(mTranslate, 0);
             mLinearGradient.setLocalMatrix(mGradientMatrix);
-            postInvalidateDelayed(20);
+            postInvalidateDelayed(50);
         }
     }
 }

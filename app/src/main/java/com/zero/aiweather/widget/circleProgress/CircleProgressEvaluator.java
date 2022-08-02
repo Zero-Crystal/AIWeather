@@ -1,4 +1,4 @@
-package com.zero.aiweather.view.circleProgress;
+package com.zero.aiweather.widget.circleProgress;
 
 import android.animation.TypeEvaluator;
 

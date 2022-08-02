@@ -2,8 +2,15 @@ package com.zero.aiweather.utils;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.view.animation.LayoutAnimationController;
 import android.view.animation.LinearInterpolator;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.zero.aiweather.R;
+import com.zero.aiweather.application.MyApplication;
 
 /**
  * 动画工具类
@@ -88,6 +95,24 @@ public class AnimationUtil {
 
     public void addEndListener(EndListener endListener){
         this.endListener = endListener;
+    }
+
+    /**
+     * RecyclerView动画，从左入场
+     * */
+    public void setLayoutAnimationLeft(RecyclerView view) {
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(MyApplication.getContext(), R.anim.layout_animation_from_left);
+        // 为 RecycleView 应用布局动画
+        view.setLayoutAnimation(controller);
+    }
+
+    /**
+     * RecyclerView动画，从底部入场
+     * */
+    public void setLayoutAnimationBottom(RecyclerView view) {
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(MyApplication.getContext(), R.anim.layout_animation_from_bottom);
+        // 为 RecycleView 应用布局动画
+        view.setLayoutAnimation(controller);
     }
 
     public interface EndListener {

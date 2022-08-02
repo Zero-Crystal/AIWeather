@@ -10,7 +10,7 @@ import com.zero.base.base.IBaseView;
  * 网络请求Fragment基类
  * */
 public abstract class MvpFragment<P extends BasePresenter> extends BaseFragment {
-    protected P mPresenter;
+    public P mPresenter;
 
     /**
      * 创建Presenter
