@@ -30,11 +30,14 @@ import com.zero.aiweather.model.AirQualityResponse;
 import com.zero.aiweather.model.CitySearchResponse;
 import com.zero.aiweather.model.Day7Response;
 import com.zero.aiweather.model.HourlyResponse;
+import com.zero.aiweather.model.MoonResponse;
 import com.zero.aiweather.model.NowResponse;
+import com.zero.aiweather.model.SunResponse;
 import com.zero.aiweather.utils.AnimationUtil;
 import com.zero.aiweather.utils.Constant;
 import com.zero.aiweather.utils.GPSUtil;
 import com.zero.aiweather.utils.SPUtil;
+import com.zero.aiweather.utils.TimeUtil;
 import com.zero.aiweather.utils.ToastUtil;
 import com.zero.aiweather.utils.WeatherUtil;
 import com.zero.aiweather.viewModel.SearchViewModel;
@@ -44,6 +47,8 @@ import com.zero.base.util.DateUtil;
 import com.zero.base.util.KLog;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,10 +99,6 @@ public class WeatherFragment extends MvpFragment<WeatherContract.WeatherPresente
         initList();
         initListener();
         startLocate();
-        binding.sunView.setSunTime("2021-11-20 4:30", "2021-11-20 20:19");
-        binding.sunView.startAnimation();
-        binding.moonView.setSunTime("2021-11-20 17:25", "2021-11-21 07:42");
-        binding.moonView.startAnimation();
     }
 
     private void initList() {
@@ -114,7 +115,7 @@ public class WeatherFragment extends MvpFragment<WeatherContract.WeatherPresente
 
         NormalItemDecoration itemDecoration = new NormalItemDecoration.Builder(getContext())
                 .colorResId(R.color.black_90)
-                .height(2)
+                .height(5)
                 .create();
         GridLayoutManager adviceManager = new GridLayoutManager(getContext(), 3);
         advice2Adapter = new Advice2Adapter(R.layout.item_recyclerview_advice2, adviceList, getContext());
@@ -186,6 +187,8 @@ public class WeatherFragment extends MvpFragment<WeatherContract.WeatherPresente
         mPresenter.getWeatherDay7(location);
         mPresenter.getAirQuality(location);
         mPresenter.getLifeAdvice(location);
+        mPresenter.getSunTime(location, TimeUtil.getCurrentTime(TimeUtil.format3));
+        mPresenter.getMoonTime(location, TimeUtil.getCurrentTime(TimeUtil.format3));
     }
 
     @Override
@@ -300,6 +303,22 @@ public class WeatherFragment extends MvpFragment<WeatherContract.WeatherPresente
             mPresenter.getAirQuality(locationId);
             mPresenter.getLifeAdvice(locationId);
         }
+    }
+
+    @Override
+    public void showSunRiseAndSet(SunResponse sunResponse) {
+        KLog.i("showMoonRiseAndSet: -------------------> sun rise time " + sunResponse.getSunrise() + ", sun set time " + sunResponse.getSunset());
+        hideLoadingDialog();
+        binding.sunView.setSunTime(sunResponse.getSunrise(), sunResponse.getSunset());
+        binding.sunView.startAnimation();
+    }
+
+    @Override
+    public void showMoonRiseAndSet(MoonResponse moonResponse) {
+        KLog.i("showMoonRiseAndSet: -------------------> moon rise time " + moonResponse.getMoonrise() + ", moon set time " + moonResponse.getMoonset());
+        hideLoadingDialog();
+        binding.moonView.setSunTime(moonResponse.getMoonrise(), moonResponse.getMoonset());
+        binding.moonView.startAnimation();
     }
 
     @Override

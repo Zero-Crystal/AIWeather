@@ -32,6 +32,8 @@ public class SunView extends View {
     private Drawable iconSun;
     /** 圆弧颜色*/
     private int mCircleColor;
+    /** 进度圆弧颜色*/
+    private int mProgressColor;
     /** 描边宽度*/
     private float strokeWidth;
     /** 文字颜色*/
@@ -72,6 +74,7 @@ public class SunView extends View {
     private Rect mTextRect;
 
     private Paint mCirclePaint;
+    private Paint mProgressPaint;
     private Paint mTextPaint;
 
     public SunView(Context context) {
@@ -82,11 +85,10 @@ public class SunView extends View {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView);
         mCircleColor = typedArray.getColor(R.styleable.SunView_sun_circle_color, ContextCompat.getColor(context, R.color.white));
+        mProgressColor = typedArray.getColor(R.styleable.SunView_sun_progress_circle_color, ContextCompat.getColor(context, R.color.gray));
         strokeWidth = typedArray.getDimension(R.styleable.SunView_sun_circle_width, 5);
         textColor = typedArray.getColor(R.styleable.SunView_sun_text_color, ContextCompat.getColor(context, R.color.white));
         textSize = typedArray.getDimension(R.styleable.SunView_sun_text_size, DensityUtil.sp2px(14));
-        startTime = typedArray.getString(R.styleable.SunView_sun_rise_text);
-        endTime = typedArray.getString(R.styleable.SunView_sun_set_text);
         iconSun = typedArray.getDrawable(R.styleable.SunView_sun_icon);
 
         iconWidth = iconSun.getIntrinsicWidth();
@@ -109,6 +111,12 @@ public class SunView extends View {
         mCirclePaint.setStrokeWidth(strokeWidth);
         //虚线
         mCirclePaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
+        //进度条
+        mProgressPaint = new Paint();
+        mProgressPaint.setStyle(Paint.Style.STROKE);
+        mProgressPaint.setColor(mProgressColor);
+        mProgressPaint.setStrokeWidth(strokeWidth);
+        mProgressPaint.setPathEffect(new DashPathEffect(new float[]{4, 4}, 0));
         //文字Paint
         mTextPaint = new Paint();
         mTextPaint.setStyle(Paint.Style.FILL);
@@ -132,8 +140,9 @@ public class SunView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         initRect();
-        drawHalfCircle(canvas, 180);
+        drawHalfCircle(canvas, mCirclePaint, 180);
         drawIcon(canvas);
+        drawHalfCircle(canvas, mProgressPaint, sweepAngle * mAnimationValue);
         drawText(canvas, startTime, centerX - mCircleRadius, centerY);
         drawText(canvas, endTime, centerX + mCircleRadius, centerY);
     }
@@ -151,8 +160,8 @@ public class SunView extends View {
                 centerX + mCircleRadius, centerY + mCircleRadius - textHeight);
     }
 
-    private void drawHalfCircle(Canvas canvas, float sweepAngle) {
-        canvas.drawArc(mCircleRect, 180, sweepAngle, false, mCirclePaint);
+    private void drawHalfCircle(Canvas canvas, Paint paint, float sweepAngle) {
+        canvas.drawArc(mCircleRect, 180, sweepAngle, false, paint);
     }
 
     private void drawIcon(Canvas canvas) {

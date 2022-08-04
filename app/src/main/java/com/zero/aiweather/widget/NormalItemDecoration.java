@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 public class NormalItemDecoration extends RecyclerView.ItemDecoration {
     private int dividerHeight = 1;//分割线高度
     private Paint paint;

@@ -60,16 +60,14 @@
     <declare-styleable name="SunView">
         <!--背景圆弧颜色-->
         <attr name="sun_circle_color" format="color"/>
+        <!--背景进度圆弧颜色-->
+        <attr name="sun_progress_circle_color" format="color"/>
         <!--背景圆弧线宽-->
         <attr name="sun_circle_width" format="dimension" />
         <!--字体大小-->
         <attr name="sun_text_size" format="dimension" />
         <!--字体颜色-->
         <attr name="sun_text_color" format="color"/>
-        <!--日出时间-->
-        <attr name="sun_rise_text" format="string" />
-        <!--日落时间-->
-        <attr name="sun_set_text" format="string" />
         <!--图标icon-->
         <attr name="sun_icon" format="reference" />
     </declare-styleable>

@@ -10,6 +10,7 @@ import java.util.Locale;
 public class TimeUtil {
     public static final String format1 = "HH:mm";
     public static final String format2 = "yyyy-MM-dd HH:mm";
+    public static final String format3 = "yyyyMMdd";
 
     /**
      * 获取当前时间：HH:mm

@@ -7,6 +7,8 @@ import com.zero.aiweather.model.AdviceResponse;
 import com.zero.aiweather.model.AirQualityResponse;
 import com.zero.aiweather.model.CitySearchResponse;
 import com.zero.aiweather.model.HourlyResponse;
+import com.zero.aiweather.model.MoonResponse;
+import com.zero.aiweather.model.SunResponse;
 import com.zero.aiweather.netApi.ApiService;
 import com.zero.aiweather.model.Day7Response;
 import com.zero.aiweather.model.NowResponse;
@@ -183,6 +185,66 @@ public class WeatherContract {
             }
             return adviceModelList;
         }
+
+        @SuppressLint("CheckResult")
+        public void getSunTime(String location, String date) {
+            ApiService apiService = NetWorkApi.createService(ApiService.class);
+            apiService.getSunTime(location, date).compose(NetWorkApi.applySchedulers(new BaseObserver<SunResponse>() {
+                @Override
+                public void onSuccess(SunResponse sunResponse) {
+                    if (sunResponse != null) {
+                        String sunRiseTime = sunResponse.getSunrise().substring(0, 10)
+                                + " " + sunResponse.getSunrise().substring(11, 16);
+                        String sunSetTime = sunResponse.getSunset().substring(0, 10)
+                                + " " + sunResponse.getSunset().substring(11, 16);
+                        sunResponse.setSunrise(sunRiseTime);
+                        sunResponse.setSunset(sunSetTime);
+                        if (getView() != null) {
+                            getView().showSunRiseAndSet(sunResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable e) {
+                    e.printStackTrace();
+                    if (getView() != null) {
+                        getView().onFailure("数据请求失败！");
+                    }
+                    KLog.e("数据请求失败！" + e.getMessage());
+                }
+            }));
+        }
+
+        @SuppressLint("CheckResult")
+        public void getMoonTime(String location, String date) {
+            ApiService apiService = NetWorkApi.createService(ApiService.class);
+            apiService.getMoonTime(location, date).compose(NetWorkApi.applySchedulers(new BaseObserver<MoonResponse>() {
+                @Override
+                public void onSuccess(MoonResponse moonResponse) {
+                    if (moonResponse != null) {
+                        String moonRiseTime = moonResponse.getMoonrise().substring(0, 10)
+                                + " " + moonResponse.getMoonrise().substring(11, 16);
+                        String moonSetTime = moonResponse.getMoonset().substring(0, 10)
+                                + " " + moonResponse.getMoonset().substring(11, 16);
+                        moonResponse.setMoonrise(moonRiseTime);
+                        moonResponse.setMoonset(moonSetTime);
+                        if (getView() != null) {
+                            getView().showMoonRiseAndSet(moonResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable e) {
+                    e.printStackTrace();
+                    if (getView() != null) {
+                        getView().onFailure("数据请求失败！");
+                    }
+                    KLog.e("数据请求失败！" + e.getMessage());
+                }
+            }));
+        }
     }
 
     public interface IWeatherView extends IBaseView {
@@ -206,11 +268,18 @@ public class WeatherContract {
          * 展示生活指数
          * */
         void showLiftAdvice(List<AdviceModel> adviceModelList);
-//        void showLiftAdvice(AdviceResponse adviceResponse);
         /**
          * 展示城市id搜索
          * */
         void showCityId(CitySearchResponse citySearchResponse);
+        /**
+         * 展示日升日落
+         * */
+        void showSunRiseAndSet(SunResponse sunResponse);
+        /**
+         * 展示月升月落
+         * */
+        void showMoonRiseAndSet(MoonResponse moonResponse);
         /**
          * 请求失败
          * */

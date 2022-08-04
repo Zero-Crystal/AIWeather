@@ -6,7 +6,9 @@ import com.zero.aiweather.model.BiYingImgResponse;
 import com.zero.aiweather.model.CitySearchResponse;
 import com.zero.aiweather.model.Day7Response;
 import com.zero.aiweather.model.HourlyResponse;
+import com.zero.aiweather.model.MoonResponse;
 import com.zero.aiweather.model.NowResponse;
+import com.zero.aiweather.model.SunResponse;
 import com.zero.aiweather.utils.Constant;
 
 import io.reactivex.Observable;
@@ -52,6 +54,18 @@ public interface ApiService {
      * */
     @GET("city/lookup?key=" + Constant.ApiKey)
     Observable<CitySearchResponse> getCityId(@Query("location") String district);
+
+    /**
+     * 日升日落
+     * */
+    @GET("astronomy/sun?key=" + Constant.ApiKey)
+    Observable<SunResponse> getSunTime(@Query("location") String location, @Query("date") String date);
+
+    /**
+     * 月升月落
+     * */
+    @GET("astronomy/moon?key=" + Constant.ApiKey)
+    Observable<MoonResponse> getMoonTime(@Query("location") String location, @Query("date") String date);
 
     /**
      * 必应每日一图

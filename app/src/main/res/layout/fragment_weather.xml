@@ -320,19 +320,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_200"
                     android:layout_marginTop="@dimen/dp_30"
+                    android:padding="@dimen/dp_10"
                     android:background="@drawable/bg_white90_radius20">
 
                     <com.zero.aiweather.widget.SunView
                         android:id="@+id/sun_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:sun_icon="@drawable/icon_100_fill"/>
+                        app:sun_icon="@drawable/icon_100_fill"
+                        app:sun_progress_circle_color="@color/yellow"
+                        app:sun_circle_color="@color/white_20"
+                        app:sun_text_color="@color/white_20"
+                        app:sun_text_size="@dimen/sp_14"/>
 
                     <com.zero.aiweather.widget.SunView
                         android:id="@+id/moon_view"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_145"
+                        android:layout_height="@dimen/dp_140"
                         app:sun_icon="@drawable/icon_moon"
+                        app:sun_progress_circle_color="@color/yellow"
+                        app:sun_circle_color="@color/white_20"
+                        app:sun_text_color="@color/white_20"
+                        app:sun_text_size="@dimen/sp_14"
                         app:layout_constraintBottom_toBottomOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
