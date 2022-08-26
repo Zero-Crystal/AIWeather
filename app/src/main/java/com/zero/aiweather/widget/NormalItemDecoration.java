@@ -1,15 +1,11 @@
 package com.zero.aiweather.widget;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
 
-import androidx.annotation.DimenRes;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -170,13 +166,9 @@ public class NormalItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     public static class Builder {
-        private Context mContext;
-        protected Resources mResources;
         private NormalItemDecoration itemDecoration;
 
-        public Builder(Context context) {
-            mContext = context;
-            mResources = context.getResources();
+        public Builder() {
             itemDecoration = new NormalItemDecoration();
         }
 
@@ -186,17 +178,12 @@ public class NormalItemDecoration extends RecyclerView.ItemDecoration {
         }
 
         public Builder colorResId(int color){
-            itemDecoration.setDividerColor(ContextCompat.getColor(mContext,color));
+            itemDecoration.setDividerColor(color);
             return this;
         }
 
         public Builder height(final int height) {
             itemDecoration.setDividerHeight(height);
-            return this;
-        }
-
-        public Builder heightResId(@DimenRes int id) {
-            itemDecoration.setDividerHeight(mResources.getDimensionPixelSize(id));
             return this;
         }
 
@@ -221,13 +208,13 @@ public class NormalItemDecoration extends RecyclerView.ItemDecoration {
 
         }
 
-        public Builder leftMarginRes(int id){
-            itemDecoration.setRightMargin(mResources.getDimensionPixelSize(id));
+        public Builder leftMarginRes(int leftMargin){
+            itemDecoration.setLeftMargin(leftMargin);
             return this;
         }
 
-        public Builder rightMarginRes(int id){
-            itemDecoration.setRightMargin(mResources.getDimensionPixelSize(id));
+        public Builder rightMarginRes(int rightMargin){
+            itemDecoration.setRightMargin(rightMargin);
             return this;
         }
     }

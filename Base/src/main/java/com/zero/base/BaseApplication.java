@@ -1,15 +1,15 @@
 package com.zero.base;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.zero.base.util.ActivityManager;
-import com.zero.base.util.LogUtils;
+
+import org.litepal.LitePalApplication;
 
 /**
  * 工程管理类
  * */
-public class BaseApplication extends Application {
+public class BaseApplication extends LitePalApplication {
     private static Context context;
     private static ActivityManager activityManager;
     private static BaseApplication application;
@@ -20,8 +20,6 @@ public class BaseApplication extends Application {
         application = this;
         context = getApplicationContext();
         activityManager = new ActivityManager();
-        //初始化日志输出等级
-        LogUtils.LEVEL = LogUtils.DEBUG;
     }
 
     public static Context getContext() {

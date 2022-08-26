@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#000000</color>
+    <color name="black_100">#00000000</color>
     <color name="black_90">#1A000000</color>
+    <color name="black_70">#4D000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="black_20">#CC000000</color>
     <!--透明-->
     <color name="transparent">#00000000</color>
     <!-- 白色-->
@@ -16,16 +20,31 @@
     <color name="gray_70">#4D999999</color>
     <color name="gray_50">#80999999</color>
     <color name="gray">#999999</color>
+    <!-- 浅灰色-->
+    <color name="shallow_gray">#F2F2F2</color>
+    <!-- 灰白-->
+    <color name="gray_white">#F8F8F8</color>
+    <!-- 浅蓝色 偏白-->
+    <color name="shallow_blue">#E7F3FC</color>
     <!-- 蓝色-->
     <color name="blue_90">#1A3399ff</color>
     <color name="blue_70">#4D3399ff</color>
     <color name="blue_50">#803399ff</color>
     <color name="blue_20">#CC3399ff</color>
     <color name="blue">#3399ff</color>
+    <!-- 粉色-->
+    <color name="pink">#FFBCB3</color>
+    <color name="pink_20">#CCFFBCB3</color>
+    <!-- 浅粉色-->
+    <color name="pink_one">#FDEBE8</color>
+    <!-- 枯黄色-->
+    <color name="bisque">#FFCC66</color>
+    <!-- 浅橘色-->
+    <color name="shallow_orange">#FFEFD5</color>
     <!-- 天气示警颜色-->
     <color name="green">#33cc99</color>
     <color name="yellow">#ffff33</color>
-    <color name="orange">#ff9933</color>
+    <color name="orange">#F38A50</color>
     <color name="red">#ff3333</color>
     <color name="purple">#BB86FC</color>
     <color name="maroon">#990000</color>

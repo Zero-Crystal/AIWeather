@@ -20,7 +20,7 @@ public class HourlyAdapter extends BaseQuickAdapter<HourlyResponse.Hourly, BaseV
     @Override
     protected void convert(BaseViewHolder helper, HourlyResponse.Hourly item) {
         String time = item.getFxTime().substring(11, 16);
-        helper.setText(R.id.tv_item_hour, DateUtil.showTimeInfo(time) + time);
+        helper.setText(R.id.tv_item_hour, DateUtil.getTimeInfo(time) + time);
         helper.setText(R.id.tv_item_tem, item.getTemp());
         helper.setImageResource(R.id.iv_item_icon, WeatherUtil.getWeatherIcon(item.getText()));
     }

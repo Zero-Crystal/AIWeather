@@ -2,20 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/ll_bubble_root"
-    android:layout_width="@dimen/dp_240"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/dp_10"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/dp_30"
     android:paddingLeft="@dimen/dp_10"
     android:paddingRight="@dimen/dp_10"
-    android:paddingBottom="@dimen/dp_30"
+    android:paddingBottom="@dimen/dp_40"
     android:gravity="center"
-    android:background="@drawable/bg_bubble_top">
+    android:background="@drawable/ic_bubble_down">
 
     <TextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="@dimen/dp_10"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="15sp"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:gravity="center" />

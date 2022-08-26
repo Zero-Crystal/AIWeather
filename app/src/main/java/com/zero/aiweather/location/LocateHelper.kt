@@ -4,40 +4,51 @@ import android.content.Context
 import com.baidu.location.LocationClient
 import com.baidu.location.LocationClientOption
 import com.zero.aiweather.utils.GPSUtil
-import com.zero.aiweather.utils.ToastUtil
-import com.zero.base.util.KLog
 
-class LocateHelper(var context: Context) {
-    var locationClient: LocationClient? = null
-    var locationListener: LocationListener? = null
+class LocateHelper(
+        var context: Context
+) {
+    private lateinit var locationListener: LocationListener
+    private lateinit var locationClient: LocationClient
 
-    fun initLocate(locateResult: LocationListener.LocateResult) {
-        locationListener = LocationListener()
-        locationListener!!.locationResult = locateResult
+    var mapHelper: MapHelper? = null
 
-        locationClient = LocationClient(context)
-        val options = LocationClientOption()
-        //可选，是否需要地址信息
-        options.setIsNeedAddress(true)
-        //可选，设置是否需要最新版本的地址信息
-        options.setNeedNewVersionRgc(true)
-        locationClient!!.locOption = options
-        locationClient!!.registerLocationListener(locationListener)
-    }
-
-    fun startLocate(): Boolean {
-        return if (GPSUtil.isOPen(context)) {
-            KLog.i("---------------------> 定位中...")
-            locationClient!!.start()
-            true
-        } else {
-            KLog.i("---------------------> 定位未打开")
-            ToastUtil.showToast("定位未打开")
-            false
+    fun initMapHelper() {
+        if (mapHelper == null) {
+            mapHelper = MapHelper(context)
         }
     }
 
+    fun initLocate(locateCallback: LocationListener.LocateCallback) {
+        locationListener = LocationListener()
+        locationListener.locationCallback = locateCallback
+        val options = LocationClientOption().apply {
+            //可选，是否需要地址信息
+            setIsNeedAddress(true)
+            //可选，设置是否需要最新版本的地址信息
+            setNeedNewVersionRgc(true)
+            //设置坐标类型，可以设置BD09LL和GCJ02两种坐标
+            setCoorType("bd09ll")
+        }
+        locationClient = LocationClient(context)
+        locationClient.locOption = options
+        locationClient.registerLocationListener(locationListener)
+    }
+
+    fun isGpsOpen(): Boolean {
+        return GPSUtil.isOPen(context)
+    }
+
+    fun startLocate() {
+        locationClient.start()
+    }
+
     fun stopLocate() {
-        locationClient!!.stop()
+        locationClient.stop()
+    }
+
+    fun release() {
+        stopLocate()
+        mapHelper?.release()
     }
 }

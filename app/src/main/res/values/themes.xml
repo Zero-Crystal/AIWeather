@@ -13,15 +13,15 @@
         <item name="android:windowBackground">@android:color/transparent</item><!--透明背景-->
     </style>
 
-    <!--右侧弹出-->
+    <!--右上-->
     <style name="AnimationRightFade">
         <!--进场动画-->
-        <item name="android:windowEnterAnimation">@anim/in_right_to_left</item>
+        <item name="android:windowEnterAnimation">@anim/in_right_top</item>
         <!--退场动画-->
-        <item name="android:windowExitAnimation">@anim/out_left_to_right</item>
+        <item name="android:windowExitAnimation">@anim/out_right_top</item>
     </style>
 
-    <!--底部弹出-->
+    <!--底部-->
     <style name="AnimationBottomFade">
         <!--进场动画-->
         <item name="android:windowEnterAnimation">@anim/in_bottom_to_top</item>
@@ -34,42 +34,5 @@
         <item name="android:windowEnterAnimation">@anim/popup_add_show</item>
         <item name="android:windowExitAnimation">@anim/popup_add_hide</item>
     </style>
-
-    <!--开关按钮-->
-    <declare-styleable name="SwitchButton">
-        <attr name="sb_shadow_radius" format="reference|dimension"/>
-        <attr name="sb_shadow_offset" format="reference|dimension"/>
-        <attr name="sb_shadow_color" format="reference|color"/>
-        <attr name="sb_uncheck_color" format="reference|color"/>
-        <attr name="sb_checked_color" format="reference|color"/>
-        <attr name="sb_border_width" format="reference|dimension"/>
-        <attr name="sb_checkline_color" format="reference|color"/>
-        <attr name="sb_checkline_width" format="reference|dimension"/>
-        <attr name="sb_uncheckcircle_color" format="reference|color"/>
-        <attr name="sb_uncheckcircle_width" format="reference|dimension"/>
-        <attr name="sb_uncheckcircle_radius" format="reference|dimension"/>
-        <attr name="sb_checked" format="reference|boolean"/>
-        <attr name="sb_shadow_effect" format="reference|boolean"/>
-        <attr name="sb_effect_duration" format="reference|integer"/>
-        <attr name="sb_button_color" format="reference|color"/>
-        <attr name="sb_show_indicator" format="reference|boolean"/>
-        <attr name="sb_background" format="reference|color"/>
-        <attr name="sb_enable_effect" format="reference|boolean"/>
-    </declare-styleable>
-
-    <declare-styleable name="SunView">
-        <!--背景圆弧颜色-->
-        <attr name="sun_circle_color" format="color"/>
-        <!--背景进度圆弧颜色-->
-        <attr name="sun_progress_circle_color" format="color"/>
-        <!--背景圆弧线宽-->
-        <attr name="sun_circle_width" format="dimension" />
-        <!--字体大小-->
-        <attr name="sun_text_size" format="dimension" />
-        <!--字体颜色-->
-        <attr name="sun_text_color" format="color"/>
-        <!--图标icon-->
-        <attr name="sun_icon" format="reference" />
-    </declare-styleable>
 
 </resources>

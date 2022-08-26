@@ -45,7 +45,7 @@ public class CityPopWindowHelper {
     public void showCityPopupWindow(List<ProvinceResponse> provinceList, Context context) {
         PopupWindowUtil popupWindowUtil = new PopupWindowUtil(context);
         PopupWindowCitiesBinding popupBinding = PopupWindowCitiesBinding.inflate(LayoutInflater.from(context));
-        popupWindowUtil.showRightPopupWindow(popupBinding.getRoot());
+        popupWindowUtil.showRightTop(popupBinding.getRoot());
         this.provinceList.clear();
         this.provinceList.addAll(provinceList);
         initProvinceRcv(popupBinding);
@@ -105,7 +105,7 @@ public class CityPopWindowHelper {
                         areaAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
                             @Override
                             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                                cityCallback.onItemClick(areaList.get(position).getName());
+                                cityCallback.onItemClickCallBack(areaList.get(position).getName());
                                 popupWindowUtil.closePopupWindow();
                             }
                         });
@@ -146,6 +146,9 @@ public class CityPopWindowHelper {
     }
 
     public interface ICityCallback {
-        void onItemClick (String district);
+        /**
+         * 切换城市点击回调
+         * */
+        void onItemClickCallBack(String district);
     }
 }

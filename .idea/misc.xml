@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Base/src/main/res/layout/dialog_loading.xml" value="0.2015625" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Resourse/src/main/res/drawable/ic_back.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Resourse/src/main/res/drawable/ic_back_black.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Resourse/src/main/res/drawable/ic_choose.xml" value="0.132" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Resourse/src/main/res/drawable/ic_choose_checked.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Resourse/src/main/res/drawable/ic_choose_normal.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Resourse/src/main/res/drawable/ic_setting.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/Resourse/src/main/res/drawable/icon_moon.xml" value="0.1145" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bd_border_radius20.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bg_blue_radius20.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bg_border_gray_radius20.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bg_border_white90_radius20.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bg_border_white_radius20.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bg_radiobutton_choose.xml" value="0.132" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bg_select_check.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/drawable/bg_select_img.xml" value="0.131" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/activity_image_display.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/activity_map.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/activity_settings.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/activity_test.xml" value="0.1" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/activity_wallpaper.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/activity_wallpaper_display.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/dialog_wallpaper_change.xml" value="0.16905737704918034" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/fragment_weather.xml" value="0.2015625" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/include_temperature_now.xml" value="0.1" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/item_recyclerview_imageview.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/item_recyclerview_web_img.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/popup_window_add.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/popup_window_advice.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/popup_window_background_setting.xml" value="0.165" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/popup_window_cities.xml" value="0.16700819672131148" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/layout/popup_window_list_img.xml" value="0.165" />
+        <entry key="..\:/Software/AndroidStudio/Android Projects/AIWeather/app/src/main/res/xml/litepal.xml" value="0.16700819672131148" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

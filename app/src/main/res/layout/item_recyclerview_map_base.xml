@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_8"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_white_radius10">
+
+    <ImageView
+        android:id="@+id/iv_item_icon"
+        android:layout_width="@dimen/dp_36"
+        android:layout_height="@dimen/dp_36"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_rain"/>
+
+    <TextView
+        android:id="@+id/tv_item_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:text="33"
+        android:textSize="18sp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:text="体感温度"
+        android:textSize="16sp"
+        android:textColor="@color/gray" />
+
+</LinearLayout>

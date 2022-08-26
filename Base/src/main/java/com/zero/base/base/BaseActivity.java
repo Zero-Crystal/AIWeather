@@ -3,11 +3,9 @@ package com.zero.base.base;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.zero.base.BaseApplication;
 import com.zero.base.R;
@@ -21,9 +19,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IUiCallB
     //Activity 上下文
     protected Activity context;
     //弹窗
-    private Dialog mDialog;
+    private Dialog loading;
 
-    private static final int FAST_CLICK_DELAY_TIME = 500;
+    private static final int FAST_CLICK_DELAY_TIME = 2 * 1000;
     private static long lastClickTime;
 
     @Override
@@ -43,55 +41,43 @@ public abstract class BaseActivity extends AppCompatActivity implements IUiCallB
      * 弹窗出现
      */
     protected void showLoadingDialog() {
-        if (mDialog == null) {
-            mDialog = new Dialog(context, R.style.loading_dialog);
+        if (loading == null) {
+            loading = new Dialog(context, R.style.loading_dialog);
         }
-        mDialog.setContentView(R.layout.dialog_loading);
-        mDialog.setCancelable(false);
-        Objects.requireNonNull(mDialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
-        mDialog.show();
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        loading.show();
     }
 
     /**
      * 弹窗隐藏
      */
     protected void hideLoadingDialog() {
-        if (mDialog != null) {
-            mDialog.dismiss();
+        if (loading != null) {
+            loading.dismiss();
         }
-        mDialog = null;
+        loading = null;
     }
 
     /**
-     * 返回 toolbar控件点击
+     * 两次点击间隔是否少于 2 * 1000ms
      *
-     * @param toolbar
-     */
-    protected void Back(Toolbar toolbar) {
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.finish();
-                if (!isFastClick()) {
-                    context.finish();
-                }
-            }
-        });
-    }
-
-    /**
-     * 两次点击间隔不能少于500ms
-     *
-     * @return flag
+     * @return flag boolean
      */
     protected static boolean isFastClick() {
         boolean flag = true;
         long currentClickTime = System.currentTimeMillis();
-        if ((currentClickTime - lastClickTime) >= FAST_CLICK_DELAY_TIME) {
+        if ((currentClickTime - lastClickTime) > FAST_CLICK_DELAY_TIME) {
+            lastClickTime = currentClickTime;
             flag = false;
         }
-        lastClickTime = currentClickTime;
-
         return flag;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BaseApplication.getActivityManager().removeActivity(this);
     }
 }

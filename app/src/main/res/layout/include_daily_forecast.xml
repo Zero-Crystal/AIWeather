@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white90_radius20"
+    android:padding="@dimen/dp_10">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_daily_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_5"/>
+
+    <com.zero.aiweather.widget.LineChartView
+        android:id="@+id/lcv_max_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_80"
+        android:layout_marginTop="@dimen/dp_10"
+        app:line_color="@color/white"
+        app:line_value_color="@color/white_20"/>
+
+    <com.zero.aiweather.widget.LineChartView
+        android:id="@+id/lcv_min_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_80"
+        app:line_color="@color/pink"
+        app:line_value_color="@color/pink_20"/>
+
+</LinearLayout>

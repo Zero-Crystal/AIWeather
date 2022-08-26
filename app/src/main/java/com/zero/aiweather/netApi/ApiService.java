@@ -9,6 +9,7 @@ import com.zero.aiweather.model.HourlyResponse;
 import com.zero.aiweather.model.MoonResponse;
 import com.zero.aiweather.model.NowResponse;
 import com.zero.aiweather.model.SunResponse;
+import com.zero.aiweather.model.WebImgResponse;
 import com.zero.aiweather.utils.Constant;
 
 import io.reactivex.Observable;
@@ -40,8 +41,8 @@ public interface ApiService {
     /**
      * 生活指数
      * */
-    @GET("indices/1d?key=" + Constant.ApiKey + "&type=1,3,6,9,13,16")
-    Observable<AdviceResponse> getLifeAdvice(@Query("location") String location);
+    @GET("indices/1d?key=" + Constant.ApiKey)
+    Observable<AdviceResponse> getLifeAdvice(@Query("location") String location, @Query("type") String type);
 
     /**
      * 实时空气质量
@@ -72,4 +73,10 @@ public interface ApiService {
      * */
     @GET("HPImageArchive.aspx?format=js&idx=0&n=1")
     Observable<BiYingImgResponse> getBiYingImage();
+
+    /**
+     * 壁纸列表
+     * */
+    @GET("/v1/vertical/vertical?limit=30&skip=180&adult=false&first=0&order=hot")
+    Observable<WebImgResponse> getWebImgList();
 }

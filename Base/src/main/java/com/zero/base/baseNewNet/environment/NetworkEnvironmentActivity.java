@@ -61,8 +61,6 @@ public class NetworkEnvironmentActivity extends AppCompatActivity {
         return "1".equalsIgnoreCase(networkEnvironment);
     }
 
-
-
     /**
      * 内部缓存变化监听类
      */

@@ -62,6 +62,9 @@ public class NetWorkApi {
             case 2://搜索城市
                 mBaseUrl = "https://geoapi.qweather.com/v2/";
                 break;
+            case 3://壁纸列表
+                mBaseUrl = "http://service.picasso.adesk.com";
+                break;
         }
         return mBaseUrl;
     }

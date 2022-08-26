@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_20"
+    android:layout_marginRight="@dimen/dp_20"
+    android:padding="@dimen/dp_15"
+    android:background="@drawable/bg_gradient_blue_radius25">
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="北京"
+        android:textSize="20sp"
+        android:textColor="@color/white_20"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30°"
+        android:textSize="60sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tv_location"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll_other"/>
+
+    <LinearLayout
+        android:id="@+id/ll_describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/dp_30"
+        app:layout_constraintLeft_toRightOf="@id/tv_temperature"
+        app:layout_constraintTop_toBottomOf="@id/tv_location"
+        app:layout_constraintBottom_toTopOf="@id/ll_aqi_wind">
+        <TextView
+            android:id="@+id/tv_describe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="晴"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_gravity="center_vertical"/>
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="@dimen/dp_36"
+            android:layout_height="@dimen/dp_36"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:src="@mipmap/weather_sunny"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_aqi_wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_15"
+        app:layout_constraintLeft_toRightOf="@id/tv_temperature"
+        app:layout_constraintTop_toBottomOf="@id/ll_describe"
+        app:layout_constraintBottom_toTopOf="@id/ll_other">
+        <TextView
+            android:id="@+id/tv_aqi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp_5"
+            android:text="@string/aqi"
+            android:textSize="18sp"
+            android:textColor="@color/red"
+            android:background="@drawable/bg_red_border_radius5"/>
+
+        <TextView
+            android:id="@+id/tv_wind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:text="东南风2级"
+            android:textSize="18sp"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp_20"
+        android:weightSum="1"
+        app:layout_constraintTop_toBottomOf="@id/ll_aqi_wind"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="紫外线"
+            android:textSize="18sp"
+            android:textColor="@color/white_20" />
+
+        <TextView
+            android:id="@+id/tv_ultraviolet_ray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="0.3"
+            android:text="弱"
+            android:textSize="18sp"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_weight="0.2"
+            android:text="大气压"
+            android:textSize="18sp"
+            android:textColor="@color/white_20" />
+
+        <TextView
+            android:id="@+id/tv_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="0.3"
+            android:text="100 pha"
+            android:textSize="18sp"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

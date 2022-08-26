@@ -21,27 +21,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AIWeather">
-        <activity android:name=".view.SettingsActivity"></activity>
+        <activity
+            android:name=".TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ImageDisplayActivity"
+            android:exported="false" />
+        <activity android:name=".activity.WallpaperActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" /> <!-- 百度定位API_KEY -->
+            android:required="false" />
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="G6TOYLc9XZ5CdAC2bWFh5yUnsO7RxGWQ" /> <!-- 定位service -->
+            android:value="G6TOYLc9XZ5CdAC2bWFh5yUnsO7RxGWQ" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".view.PreviewActivity">
+        <activity android:name=".activity.MapActivity" />
+        <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".activity.PreviewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity" />
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>

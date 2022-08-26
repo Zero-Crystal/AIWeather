@@ -37,7 +37,7 @@ public class ToastUtil {
         mToast = new Toast(MyApplication.getContext());
         mToast.setView(layout);
         mToast.setGravity(gravity, 0, 100);
-        mToast.setDuration(Toast.LENGTH_LONG);
+        mToast.setDuration(Toast.LENGTH_SHORT);
         mToast.show();
     }
 

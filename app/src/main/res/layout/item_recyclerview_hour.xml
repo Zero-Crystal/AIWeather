@@ -20,7 +20,7 @@
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
         android:layout_marginTop="@dimen/dp_10"
-        android:src="@drawable/weather_qingzhuanduoyun" />
+        android:src="@mipmap/weather_qingzhuanduoyun" />
 
     <TextView
         android:id="@+id/tv_item_tem"

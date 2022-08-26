@@ -1,5 +1,7 @@
 package com.zero.base.baseNewNet.Interceptor;
 
+import android.util.Log;
+
 import com.zero.base.util.KLog;
 
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class ResponseInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         long requestTime = System.currentTimeMillis();
         Response response = chain.proceed(chain.request());
-        KLog.i(TAG, "requestSpendTime=" + (System.currentTimeMillis() - requestTime) + "ms");
+        Log.i(TAG, "requestSpendTime=" + (System.currentTimeMillis() - requestTime) + "ms");
         return response;
     }
 }

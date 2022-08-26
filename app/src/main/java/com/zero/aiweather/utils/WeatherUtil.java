@@ -4,9 +4,6 @@ import androidx.core.content.ContextCompat;
 
 import com.zero.aiweather.R;
 import com.zero.aiweather.application.MyApplication;
-import com.zero.base.BaseApplication;
-
-import java.security.PublicKey;
 
 public class WeatherUtil {
 
@@ -14,44 +11,44 @@ public class WeatherUtil {
         int resourceId = 0;
         switch (text) {
             case "晴":
-                resourceId = R.drawable.weather_sunny;
+                resourceId = R.mipmap.weather_sunny;
                 break;
             case "多云":
-                resourceId = R.drawable.weather_duoyun;
+                resourceId = R.mipmap.weather_duoyun;
                 break;
             case "多云转晴":
-                resourceId = R.drawable.weather_qingzhuanduoyun;
+                resourceId = R.mipmap.weather_qingzhuanduoyun;
                 break;
             case "阴":
-                resourceId = R.drawable.weather_yintian;
+                resourceId = R.mipmap.weather_yintian;
                 break;
             case "霾":
-                resourceId = R.drawable.weather_mai;
+                resourceId = R.mipmap.weather_mai;
                 break;
             case "雾":
-                resourceId = R.drawable.weather_wu;
+                resourceId = R.mipmap.weather_wu;
                 break;
             case "小雨":
             case "中雨":
-                resourceId = R.drawable.weather_xiaoyu;
+                resourceId = R.mipmap.weather_xiaoyu;
                 break;
             case "大雨":
             case "暴雨":
-                resourceId = R.drawable.weather_rain;
+                resourceId = R.mipmap.weather_rain;
                 break;
             case "雨夹雪":
-                resourceId = R.drawable.weather_sleet;
+                resourceId = R.mipmap.weather_sleet;
                 break;
             case "小雪":
             case "中雪":
-                resourceId = R.drawable.weather_xiaoxue;
+                resourceId = R.mipmap.weather_xiaoxue;
                 break;
             case "大雪":
             case "暴雪":
-                resourceId = R.drawable.weather_daxue;
+                resourceId = R.mipmap.weather_daxue;
                 break;
             default:
-                resourceId = R.drawable.weather_duoyunzhuanqing;
+                resourceId = R.mipmap.weather_duoyunzhuanqing;
                 break;
         }
         return resourceId;
@@ -98,7 +95,7 @@ public class WeatherUtil {
                 iconId = R.drawable.ic_sports;
                 break;
             case "3":
-                iconId = R.drawable.ic_clothes_;
+                iconId = R.drawable.ic_clothes;
                 break;
             case "6":
                 iconId = R.drawable.ic_travel_;
@@ -114,6 +111,31 @@ public class WeatherUtil {
                 break;
             default:
                 iconId = R.drawable.icon_101;
+                break;
+        }
+        return iconId;
+    }
+
+    public static int getMapIcon(String title) {
+        int iconId = 0;
+        switch (title) {
+            case "体感温度":
+                iconId = R.drawable.ic_temperature;
+                break;
+            case "降水量":
+                iconId = R.drawable.ic_rain;
+                break;
+            case "湿度":
+                iconId = R.drawable.ic_humidity;
+                break;
+            case "大气压强":
+                iconId = R.drawable.ic_pressure;
+                break;
+            case "能见度":
+                iconId = R.drawable.ic_invisible;
+                break;
+            case "云量":
+                iconId = R.drawable.ic_cloud;
                 break;
         }
         return iconId;

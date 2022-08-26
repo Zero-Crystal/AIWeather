@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--圆环进度条-->
     <declare-styleable name="CircleProgressView">
-        <attr name="progressColor" format="color"/>
-        <attr name="progressWidth" format="dimension"/>
-        <attr name="aqiText" format="string"/>
-        <attr name="levelText" format="string"/>
-        <attr name="aqiTextColor" format="color"/>
-        <attr name="textVerticalInterval" format="dimension"/>
+        <attr name="bgCircleColor" format="color" />
+        <attr name="progressColor" format="color" />
+        <attr name="progressWidth" format="dimension" />
+        <attr name="maxProgress" format="integer" />
+        <attr name="levelTextColor" format="dimension" />
+        <attr name="levelTextSize" format="dimension" />
+        <attr name="levelText" format="string" />
+        <attr name="aqiTextColor" format="color" />
+        <attr name="aqiTextSize" format="dimension" />
+        <attr name="aqiText" format="string" />
+        <attr name="textVerticalPadding" format="dimension" />
     </declare-styleable>
 
     <!--白色风车-->
     <declare-styleable name="WhiteWindmills">
         <attr name="windColor" format="reference|color" />
     </declare-styleable>
+
+    <!--开关按钮-->
+    <declare-styleable name="SwitchButton">
+        <attr name="sb_shadow_radius" format="reference|dimension" />
+        <attr name="sb_shadow_offset" format="reference|dimension" />
+        <attr name="sb_shadow_color" format="reference|color" />
+        <attr name="sb_uncheck_color" format="reference|color" />
+        <attr name="sb_checked_color" format="reference|color" />
+        <attr name="sb_border_width" format="reference|dimension" />
+        <attr name="sb_checkline_color" format="reference|color" />
+        <attr name="sb_checkline_width" format="reference|dimension" />
+        <attr name="sb_uncheckcircle_color" format="reference|color" />
+        <attr name="sb_uncheckcircle_width" format="reference|dimension" />
+        <attr name="sb_uncheckcircle_radius" format="reference|dimension" />
+        <attr name="sb_checked" format="reference|boolean" />
+        <attr name="sb_shadow_effect" format="reference|boolean" />
+        <attr name="sb_effect_duration" format="reference|integer" />
+        <attr name="sb_button_color" format="reference|color" />
+        <attr name="sb_show_indicator" format="reference|boolean" />
+        <attr name="sb_background" format="reference|color" />
+        <attr name="sb_enable_effect" format="reference|boolean" />
+    </declare-styleable>
+
+    <!--日升日落-->
+    <declare-styleable name="AstronomyView">
+        <!--背景圆弧颜色-->
+        <attr name="astronomy_circle_color" format="color" />
+        <!--背景进度圆弧颜色-->
+        <attr name="astronomy_progress_circle_color" format="color" />
+        <!--背景圆弧半径-->
+        <attr name="astronomy_circle_radius" format="dimension|float" />
+        <!--背景圆弧线宽-->
+        <attr name="astronomy_circle_width" format="dimension" />
+        <!--字体大小-->
+        <attr name="astronomy_text_size" format="dimension" />
+        <!--字体颜色-->
+        <attr name="astronomy_text_color" format="color" />
+        <!--图标icon-->
+        <attr name="astronomy_icon" format="reference" />
+    </declare-styleable>
+
+    <!--折线图-->
+    <declare-styleable name="LineChartView">
+        <attr name="line_color" format="color" />
+        <attr name="line_width" format="dimension" />
+        <attr name="line_value_color" format="color" />
+        <attr name="line_value_size" format="dimension" />
+        <attr name="point_radius" format="dimension" />
+    </declare-styleable>
+
 </resources>

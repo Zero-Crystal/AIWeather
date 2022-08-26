@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="@dimen/dp_30"
+    android:padding="@dimen/dp_10"
+    android:background="@drawable/bg_white90_radius20">
+
+    <com.zero.aiweather.widget.WhiteWindmills
+        android:id="@+id/ww_big"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_120"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.zero.aiweather.widget.WhiteWindmills
+        android:id="@+id/ww_small"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_70"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/ww_big" />
+
+    <TextView
+        android:id="@+id/tv_wind_direction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_wind_direction"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ww_small"
+        app:layout_constraintTop_toBottomOf="@id/tv_wind_level" />
+
+    <TextView
+        android:id="@+id/tv_wind_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_wind_level"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_20"
+        app:layout_constraintBottom_toTopOf="@id/tv_wind_direction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ww_small"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

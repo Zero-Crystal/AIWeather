@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_10"
+    android:background="@color/shallow_gray">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RadioButton
+            android:id="@+id/rb_web_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:button="@drawable/bg_radiobutton_choose"
+            android:text="壁纸列表"
+            android:textSize="@dimen/sp_18" />
+
+        <RadioButton
+            android:id="@+id/rb_bi_yin_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:button="@drawable/bg_radiobutton_choose"
+            android:text="每日一图"
+            android:textSize="@dimen/sp_18" />
+
+        <RadioButton
+            android:id="@+id/rb_local_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:button="@drawable/bg_radiobutton_choose"
+            android:text="本地图片"
+            android:textSize="@dimen/sp_18" />
+
+        <RadioButton
+            android:id="@+id/rb_personal_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:button="@drawable/bg_radiobutton_choose"
+            android:text="自定义图片"
+            android:textSize="@dimen/sp_18" />
+
+        <RadioButton
+            android:id="@+id/rb_default_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:button="@drawable/bg_radiobutton_choose"
+            android:text="默认图片"
+            android:textSize="@dimen/sp_18" />
+    </RadioGroup>
+
+</LinearLayout>

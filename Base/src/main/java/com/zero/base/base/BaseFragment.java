@@ -2,7 +2,6 @@ package com.zero.base.base;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,17 +14,18 @@ import androidx.fragment.app.Fragment;
 
 import com.zero.base.R;
 
-import java.util.Objects;
-
 /**
  * Fragment基类
  * */
 public abstract class BaseFragment extends Fragment implements IUiCallBack {
-    private Activity context;
+    protected Activity context;
     private LayoutInflater inflater;
-    private ViewGroup container;
     //弹窗
-    private Dialog mDialog;
+    private Dialog loading;
+
+    @Override
+    public void initBeforeView(Bundle saveInstanceState) {
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -45,7 +45,6 @@ public abstract class BaseFragment extends Fragment implements IUiCallBack {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
-        this.container = container;
         return getLayoutView();
     }
 
@@ -61,39 +60,30 @@ public abstract class BaseFragment extends Fragment implements IUiCallBack {
         context = null;
     }
 
-    @Override
-    public void initBeforeView(Bundle saveInstanceState) {
-
-    }
-
     /**
      * 弹窗出现
      */
     protected void showLoadingDialog() {
-        if (mDialog == null) {
-            mDialog = new Dialog(context, R.style.loading_dialog);
+        if (loading == null) {
+            loading = new Dialog(context, R.style.loading_dialog);
         }
-        mDialog.setContentView(R.layout.dialog_loading);
-        mDialog.setCancelable(false);
-        Objects.requireNonNull(mDialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
-        mDialog.show();
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        loading.show();
     }
 
     /**
      * 弹窗隐藏
      */
     protected void hideLoadingDialog() {
-        if (mDialog != null) {
-            mDialog.dismiss();
+        if (loading != null) {
+            loading.dismiss();
         }
-        mDialog = null;
+        loading = null;
     }
 
     public LayoutInflater getInflater() {
         return inflater;
-    }
-
-    public ViewGroup getContainer() {
-        return container;
     }
 }

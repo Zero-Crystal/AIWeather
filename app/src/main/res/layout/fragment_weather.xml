@@ -30,318 +30,82 @@
                 android:padding="@dimen/dp_15">
 
                 <!-- 实时天气-->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tv_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_40"
-                        android:text="XX"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/iv_location"
-                        android:layout_width="@dimen/dp_15"
-                        android:layout_height="@dimen/dp_15"
-                        android:layout_marginLeft="@dimen/dp_5"
-                        android:layout_marginTop="@dimen/dp_40"
-                        android:src="@mipmap/icon_locate"
-                        android:visibility="visible"
-                        app:layout_constraintLeft_toRightOf="@id/tv_location"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_temperature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="60sp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_location" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_10"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="℃"
-                        android:textColor="@color/white"
-                        android:textSize="24sp"
-                        app:layout_constraintLeft_toRightOf="@id/tv_temperature"
-                        app:layout_constraintTop_toBottomOf="@id/tv_location" />
-
-                    <TextView
-                        android:id="@+id/tv_high_low"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="0/0"
-                        android:textColor="@color/white"
-                        android:textSize="23sp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_temperature" />
-
-                    <TextView
-                        android:id="@+id/tv_describe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_high_low" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    android:id="@+id/include_temperature_now"
+                    layout="@layout/include_temperature_now" />
 
                 <TextView
                     android:id="@+id/tv_last_update_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:layout_marginTop="@dimen/dp_40"
                     android:text="@string/tv_last_update_time"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_14" />
 
+                <!-- 逐小时天气预报-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_hourly"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_5"
+                    android:layout_marginBottom="@dimen/dp_15"
                     android:padding="@dimen/dp_10"
                     android:background="@drawable/bg_white90_radius20" />
 
                 <!-- 7日天气预报-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_daily"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_30"
-                    android:padding="@dimen/dp_10"
-                    android:background="@drawable/bg_white90_radius20" />
+                <include
+                    android:id="@+id/include_daily_forecast"
+                    layout="@layout/include_daily_forecast" />
 
                 <!-- 空气质量-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_30"
-                    android:text="空气质量："
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_22" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_circle_progress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_20"
-                    android:padding="@dimen/dp_10"
-                    android:background="@drawable/bg_white90_radius20" >
-
-                    <com.zero.aiweather.widget.circleProgress.CircleProgressView
-                        android:id="@+id/cpv_progress"
-                        android:layout_width="@dimen/dp_200"
-                        android:layout_height="@dimen/dp_200"
-                        app:aqiText="10"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:levelText="轻微" />
-
-                    <TextView
-                        android:id="@+id/tv_pm10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_pm10"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_18"
-                        app:layout_constraintBottom_toTopOf="@id/tv_pm25"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cpv_progress"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_pm25"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="@string/tv_pm25"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_18"
-                        app:layout_constraintBottom_toTopOf="@id/tv_no2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cpv_progress"
-                        app:layout_constraintTop_toBottomOf="@id/tv_pm10" />
-
-                    <TextView
-                        android:id="@+id/tv_no2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="@string/tv_no2"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_18"
-                        app:layout_constraintBottom_toTopOf="@id/tv_so2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cpv_progress"
-                        app:layout_constraintTop_toBottomOf="@id/tv_pm25" />
-
-                    <TextView
-                        android:id="@+id/tv_so2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="@string/tv_so2"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_18"
-                        app:layout_constraintBottom_toTopOf="@id/tv_co"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cpv_progress"
-                        app:layout_constraintTop_toBottomOf="@id/tv_no2" />
-
-                    <TextView
-                        android:id="@+id/tv_co"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="@string/tv_co"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_18"
-                        app:layout_constraintBottom_toTopOf="@id/tv_o3"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cpv_progress"
-                        app:layout_constraintTop_toBottomOf="@id/tv_so2" />
-
-                    <TextView
-                        android:id="@+id/tv_o3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="@string/tv_o3"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_18"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/cpv_progress"
-                        app:layout_constraintTop_toBottomOf="@id/tv_co" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    android:id="@+id/include_air_quality"
+                    layout="@layout/include_air_quality" />
 
                 <!-- 风力风向-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_30"
-                    android:text="风力风向："
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_22" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_20"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dp_10"
-                    android:background="@drawable/bg_white90_radius20" >
-
-                    <com.zero.aiweather.widget.WhiteWindmills
-                        android:id="@+id/ww_big"
-                        android:layout_width="@dimen/dp_100"
-                        android:layout_height="@dimen/dp_120"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.zero.aiweather.widget.WhiteWindmills
-                        android:id="@+id/ww_small"
-                        android:layout_width="@dimen/dp_50"
-                        android:layout_height="@dimen/dp_70"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/ww_big" />
-
-                    <TextView
-                        android:id="@+id/tv_wind_direction"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_wind_direction"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_20"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/ww_small"
-                        app:layout_constraintTop_toBottomOf="@id/tv_wind_level" />
-
-                    <TextView
-                        android:id="@+id/tv_wind_level"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_wind_level"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_20"
-                        app:layout_constraintBottom_toTopOf="@id/tv_wind_direction"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/ww_small"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    android:id="@+id/include_wind_mills"
+                    layout="@layout/include_wind_mills" />
 
                 <!-- 生活建议-->
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_advice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_30"
-                    android:orientation="vertical">
+                    android:padding="@dimen/dp_10"
+                    android:background="@drawable/bg_white90_radius20"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tv_advice"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_22" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_advice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_15"
-                        android:padding="@dimen/dp_10"
-                        android:background="@drawable/bg_white90_radius20"/>
-                </LinearLayout>
-
+                <!-- 日出日落，月升月落-->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_200"
+                    android:layout_height="@dimen/dp_220"
                     android:layout_marginTop="@dimen/dp_30"
-                    android:padding="@dimen/dp_10"
                     android:background="@drawable/bg_white90_radius20">
 
-                    <com.zero.aiweather.widget.SunView
+                    <com.zero.aiweather.widget.AstronomyView
                         android:id="@+id/sun_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:sun_icon="@drawable/icon_100_fill"
-                        app:sun_progress_circle_color="@color/yellow"
-                        app:sun_circle_color="@color/white_20"
-                        app:sun_text_color="@color/white_20"
-                        app:sun_text_size="@dimen/sp_14"/>
+                        android:padding="@dimen/dp_15"
+                        app:astronomy_icon="@drawable/icon_100_fill"
+                        app:astronomy_progress_circle_color="@color/bisque"
+                        app:astronomy_circle_color="@color/white_20"
+                        app:astronomy_text_color="@color/white_20"
+                        app:astronomy_text_size="@dimen/sp_14"/>
 
-                    <com.zero.aiweather.widget.SunView
+                    <com.zero.aiweather.widget.AstronomyView
                         android:id="@+id/moon_view"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_140"
-                        app:sun_icon="@drawable/icon_moon"
-                        app:sun_progress_circle_color="@color/yellow"
-                        app:sun_circle_color="@color/white_20"
-                        app:sun_text_color="@color/white_20"
-                        app:sun_text_size="@dimen/sp_14"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/dp_15"
+                        app:astronomy_icon="@drawable/icon_moon"
+                        app:astronomy_progress_circle_color="@color/bisque"
+                        app:astronomy_circle_color="@color/white_20"
+                        app:astronomy_text_color="@color/white_20"
+                        app:astronomy_text_size="@dimen/sp_14"
                         app:layout_constraintBottom_toBottomOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,23 +11,18 @@ import org.json.JSONObject;
  * 自定义日志类
  */
 public final class KLog {
-    private static boolean IS_SHOW_LOG = true;
-
     private static final String DEFAULT_MESSAGE = "execute";
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final int JSON_INDENT = 4;
 
-    private static final int V = 0x1;
-    private static final int D = 0x2;
-    private static final int I = 0x3;
-    private static final int W = 0x4;
-    private static final int E = 0x5;
-    private static final int A = 0x6;
-    private static final int JSON = 0x7;
-
-    public static void init(boolean isShowLog) {
-        IS_SHOW_LOG = isShowLog;
-    }
+    public static final int V = 0x1;
+    public static final int D = 0x2;
+    public static final int I = 0x3;
+    public static final int W = 0x4;
+    public static final int E = 0x5;
+    public static final int A = 0x6;
+    public static final int JSON = 0x7;
+    public static int LEVEL = 0;
 
     public static void v() {
         printLog(V, null, DEFAULT_MESSAGE);
@@ -101,7 +96,6 @@ public final class KLog {
         printLog(A, tag, msg);
     }
 
-
     public static void json(String jsonFormat) {
         printLog(JSON, null, jsonFormat);
     }
@@ -110,60 +104,48 @@ public final class KLog {
         printLog(JSON, tag, jsonFormat);
     }
 
-
     private static void printLog(int type, String tagStr, String msg) {
-
-        if (!IS_SHOW_LOG) {
-            return;
-        }
-
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        if (LEVEL > type) return;
 
         int index = 4;
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String className = stackTrace[index].getFileName();
         String methodName = stackTrace[index].getMethodName();
         int lineNumber = stackTrace[index].getLineNumber();
-
+        //TAG
         String tag = (tagStr == null ? className : tagStr);
+        //Message
         methodName = methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
-
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[ (").append(className).append(":").append(lineNumber).append(")->").append(methodName).append(" ] ");
-
-        if (msg != null && type != JSON) {
-            stringBuilder.append(msg);
-        }
-
-        String logStr = stringBuilder.toString();
-
+        stringBuilder.append("KLog [(").append(className).append(":").append(lineNumber).append(")->").append(methodName).append("] ");
+        if (msg != null && type != JSON) stringBuilder.append(msg);
+        String logMessage = stringBuilder.toString();
+        //print log
         switch (type) {
             case V:
-                Log.v(tag, logStr);
+                Log.v(tag, logMessage);
                 break;
             case D:
-                Log.d(tag, logStr);
+                Log.d(tag, logMessage);
                 break;
             case I:
-                Log.i(tag, logStr);
+                Log.i(tag, logMessage);
                 break;
             case W:
-                Log.w(tag, logStr);
+                Log.w(tag, logMessage);
                 break;
             case E:
-                Log.e(tag, logStr);
+                Log.e(tag, logMessage);
                 break;
             case A:
-                Log.wtf(tag, logStr);
+                Log.wtf(tag, logMessage);
                 break;
             case JSON: {
-
                 if (TextUtils.isEmpty(msg)) {
                     Log.d(tag, "Empty or Null json content");
                     return;
                 }
-
                 String message = null;
-
                 try {
                     if (msg.startsWith("{")) {
                         JSONObject jsonObject = new JSONObject(msg);
@@ -178,7 +160,7 @@ public final class KLog {
                 }
 
                 printLine(tag, true);
-                message = logStr + LINE_SEPARATOR + message;
+                message = logMessage + LINE_SEPARATOR + message;
                 String[] lines = message.split(LINE_SEPARATOR);
                 StringBuilder jsonContent = new StringBuilder();
                 for (String line : lines) {
@@ -186,12 +168,11 @@ public final class KLog {
                 }
                 Log.d(tag, jsonContent.toString());
                 printLine(tag, false);
+                break;
             }
-            break;
             default:
                 break;
         }
-
     }
 
     private static void printLine(String tag, boolean isTop) {
